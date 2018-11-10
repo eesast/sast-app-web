@@ -1,0 +1,14 @@
+.MainPage {
+  margin-top: 48px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 60vw;
+}
+
+.Spin-container {
+  margin: 24px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  text-align: center;
+}

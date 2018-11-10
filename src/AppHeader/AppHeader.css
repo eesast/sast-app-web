@@ -1,0 +1,31 @@
+.App-header {
+  background-image: linear-gradient(90deg, #6510ad 60%, #104fad);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  position: fixed;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+}
+
+.App-logo {
+  margin: auto;
+  margin-right: 12px;
+  height: 50%;
+}
+
+.App-name {
+  color: white;
+  height: 100%;
+  margin-right: 48px;
+  white-space: nowrap;
+}
+
+.App-menu {
+  line-height: 64px;
+  background-color: transparent;
+  flex-grow: 1;
+}
+
+.App-actions {
+  margin: auto;
+}

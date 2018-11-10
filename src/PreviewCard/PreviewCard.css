@@ -1,0 +1,8 @@
+.Card {
+  padding: 24px;
+}
+
+.Card-img {
+  max-height: 40vh;
+  object-fit: cover;
+}
