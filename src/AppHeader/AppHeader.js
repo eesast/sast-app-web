@@ -4,12 +4,16 @@ import { Layout, Menu, Button } from "antd";
 import "./AppHeader.css";
 import NewArticleForm from "../NewArticleForm/NewArticleForm";
 import logo from "../assets/logo.png";
+import AppDrawer from "../AppDrawer/AppDrawer";
 
 const { Header } = Layout;
 
 class AppHeader extends Component {
   state = {
-    newFormVisible: false
+    headerStyle: "App-header",
+    scrollPos: 0,
+    newFormVisible: false,
+    drawerVisible: false
   };
 
   handleNewFormClick = () => {
@@ -37,9 +41,48 @@ class AppHeader extends Component {
     this.formRef = formRef;
   };
 
+  handleScroll = () => {
+    const currentScrollPos = window.pageYOffset;
+    const delay = 24;
+    const topOffset = 12;
+
+    if (currentScrollPos + delay < this.state.scrollPos) {
+      this.setState({ headerStyle: "App-header" });
+    } else if (
+      currentScrollPos > topOffset &&
+      currentScrollPos - delay > this.state.scrollPos
+    ) {
+      this.setState({ headerStyle: "App-header-hidden" });
+    }
+
+    this.setState({ scrollPos: currentScrollPos });
+  };
+
+  handleDrawerOpen = () => {
+    this.setState({ drawerVisible: true });
+  };
+
+  handleDrawerClose = () => {
+    this.setState({ drawerVisible: false });
+  };
+
+  componentDidMount = () => {
+    window.addEventListener("scroll", this.handleScroll);
+  };
+
+  componentWillUnmount = () => {
+    window.removeEventListener("scroll", this.handleScroll);
+  };
+
   render() {
     return (
-      <Header className="App-header" id="App-header">
+      <Header className={this.state.headerStyle} id="App-header">
+        <Button
+          className="App-drawer-icon"
+          icon="bars"
+          ghost
+          onClick={this.handleDrawerOpen}
+        />
         <img className="App-logo" alt="logo" src={logo} />
         <h1 className="App-name" id="App-name">
           SAST Weekly
@@ -64,6 +107,10 @@ class AppHeader extends Component {
             onCreate={this.handleFormCreate}
           />
         </div>
+        <AppDrawer
+          visible={this.state.drawerVisible}
+          onClose={this.handleDrawerClose}
+        />
       </Header>
     );
   }

@@ -67,11 +67,7 @@ class ArticlePage extends Component {
     return (
       <DocumentTitle title={this.props.match.params.shortTitle}>
         <div className="ArticlePage">
-          <Card
-            loading={this.state.loading}
-            title={this.state.data.email}
-            extra="Huang huang"
-          >
+          <Card loading={this.state.loading} title="Huang huang">
             <article className="markdown-body">
               <div dangerouslySetInnerHTML={this.state.md} />
             </article>

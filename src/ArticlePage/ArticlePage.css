@@ -13,8 +13,15 @@
   padding: 45px;
 }
 
-@media (max-width: 767px) {
+@media screen and (max-width: 480px) {
+  .ArticlePage {
+    margin-top: 64px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100vw;
+  }
+
   .markdown-body {
-    padding: 15px;
+    padding: 10px;
   }
 }

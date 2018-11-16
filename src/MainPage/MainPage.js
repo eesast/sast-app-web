@@ -76,18 +76,16 @@ class MainPage extends Component {
             loading={this.state.loading}
             dataSource={this.state.data}
             renderItem={item => (
-              <List.Item key={item.id}>
+              <List.Item className="ListItem" key={item.id}>
                 <Link to={`/articles/${item.email}`}>
                   <PreviewCard loading={this.state.loading} />
                 </Link>
               </List.Item>
             )}
           >
-            {this.state.loading && this.state.hasMore && (
-              <div className="Spin-container">
-                <Spin />
-              </div>
-            )}
+            <div className="Spin-container">
+              {this.state.loading && this.state.hasMore && <Spin />}
+            </div>
           </List>
         </InfiniteScroll>
 

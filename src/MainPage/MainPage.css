@@ -12,3 +12,16 @@
   width: 100%;
   text-align: center;
 }
+
+@media screen and (max-width: 480px) {
+  .MainPage {
+    margin-top: 64px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100vw;
+  }
+
+  .ListItem {
+    padding: 0px;
+  }
+}

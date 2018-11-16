@@ -3,10 +3,17 @@
 }
 
 .App-content {
-  padding: 64px;
+  padding: 48px;
   min-height: calc(100vh - 69px);
 }
 
 .App-footer {
   text-align: center;
+}
+
+@media screen and (max-width: 480px) {
+  .App-content {
+    padding: 0px;
+    min-height: calc(100vh - 69px);
+  }
 }
