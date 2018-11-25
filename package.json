@@ -1,20 +1,18 @@
 {
   "name": "sast-app-web",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "dependencies": {
     "antd": "latest",
     "axios": "latest",
     "dompurify": "latest",
     "highlight.js": "latest",
-    "marked": "latest",
+    "marked": "^0.5.2",
     "react": "latest",
     "react-document-title": "latest",
     "react-dom": "latest",
     "react-infinite-scroller": "latest",
-    "react-router-dom": "latest"
-  },
-  "devDependencies": {
+    "react-router-dom": "latest",
     "react-scripts": "latest",
     "react-app-rewired": "latest",
     "react-app-rewire-less": "latest",
