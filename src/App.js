@@ -22,7 +22,9 @@ class App extends Component {
               <Route exact path="/edit" component={EditPage} />
               <Route path="/articles/:shortTitle" component={ArticlePage} />
             </Content>
-            <Footer className="App-footer">© 2018 EESAST</Footer>
+            <Footer style={{ height: "64px" }} className="App-footer">
+              © 2018 EESAST
+            </Footer>
           </Layout>
         </Router>
       </DocumentTitle>
