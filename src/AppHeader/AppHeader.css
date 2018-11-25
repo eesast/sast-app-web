@@ -39,6 +39,10 @@
   margin: auto;
 }
 
+.App-actions > * {
+  margin: 6px;
+}
+
 .App-drawer-icon {
   display: none;
 }

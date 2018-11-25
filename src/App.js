@@ -7,6 +7,7 @@ import AppHeader from "./AppHeader/AppHeader";
 import MainPage from "./MainPage/MainPage";
 import ArticlePage from "./ArticlePage/ArticlePage";
 import EditPage from "./EditPage/EditPage";
+import LoginPage from "./LoginPage/LoginPage";
 
 const { Content, Footer } = Layout;
 
@@ -20,6 +21,7 @@ class App extends Component {
             <Content className="App-content">
               <Route exact path="/" component={MainPage} />
               <Route exact path="/edit" component={EditPage} />
+              <Route exact path="/login" component={LoginPage} />
               <Route path="/articles/:shortTitle" component={ArticlePage} />
             </Content>
             <Footer style={{ height: "64px" }} className="App-footer">

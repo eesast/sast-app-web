@@ -104,6 +104,9 @@ class AppHeader extends Component {
           <Link to="/edit">
             <Button ghost icon="form" />
           </Link>
+          <Link to="/login">
+            <Button ghost icon="user" />
+          </Link>
         </div>
         <AppDrawer
           visible={this.state.drawerVisible}
