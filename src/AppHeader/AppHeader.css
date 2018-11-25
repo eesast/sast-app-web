@@ -55,5 +55,6 @@
   .App-drawer-icon {
     display: inherit;
     margin: auto;
+    margin-right: 12px;
   }
 }
