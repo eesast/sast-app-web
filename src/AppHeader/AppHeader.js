@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { Layout, Menu, Button } from "antd";
 import "./AppHeader.css";
-import NewArticleForm from "../NewArticleForm/NewArticleForm";
 import logo from "../assets/logo.png";
 import AppDrawer from "../AppDrawer/AppDrawer";
 
@@ -102,13 +101,9 @@ class AppHeader extends Component {
           </Menu.Item>
         </Menu>
         <div className="App-actions">
-          <Button ghost icon="form" onClick={this.handleNewFormClick} />
-          <NewArticleForm
-            wrappedComponentRef={this.saveFormRef}
-            visible={this.state.newFormVisible}
-            onCancel={this.handleNewFormCancel}
-            onCreate={this.handleFormCreate}
-          />
+          <Link to="/edit">
+            <Button ghost icon="form" />
+          </Link>
         </div>
         <AppDrawer
           visible={this.state.drawerVisible}

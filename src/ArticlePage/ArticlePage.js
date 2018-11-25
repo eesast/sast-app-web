@@ -6,7 +6,7 @@ import DOMPurify from "dompurify";
 import Marked from "marked";
 import DocumentTitle from "react-document-title";
 import "./ArticlePage.css";
-import "./github-markdown.css";
+import "../github-markdown.css";
 import "highlight.js/styles/github.css";
 import ExampleMD from "./example.md";
 

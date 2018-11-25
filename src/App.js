@@ -6,6 +6,7 @@ import "./App.css";
 import AppHeader from "./AppHeader/AppHeader";
 import MainPage from "./MainPage/MainPage";
 import ArticlePage from "./ArticlePage/ArticlePage";
+import EditPage from "./EditPage/EditPage";
 
 const { Content, Footer } = Layout;
 
@@ -18,6 +19,7 @@ class App extends Component {
             <AppHeader />
             <Content className="App-content">
               <Route exact path="/" component={MainPage} />
+              <Route exact path="/edit" component={EditPage} />
               <Route path="/articles/:shortTitle" component={ArticlePage} />
             </Content>
             <Footer className="App-footer">© 2018 EESAST</Footer>
