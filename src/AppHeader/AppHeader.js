@@ -46,7 +46,10 @@ class AppHeader extends Component {
     const delay = 24;
     const topOffset = 12;
 
-    if (currentScrollPos + delay < this.state.scrollPos) {
+    if (
+      currentScrollPos + delay < this.state.scrollPos ||
+      currentScrollPos < topOffset
+    ) {
       this.setState({ headerStyle: "App-header" });
     } else if (
       currentScrollPos > topOffset &&
