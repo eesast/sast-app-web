@@ -14,16 +14,14 @@ class App extends Component {
     return (
       <DocumentTitle title="SAST Weekly">
         <Router>
-          <Switch>
-            <Layout>
-              <AppHeader />
-              <Content className="App-content">
-                <Route exact path="/" component={MainPage} />
-                <Route path="/articles/:shortTitle" component={ArticlePage} />
-              </Content>
-              <Footer className="App-footer">© 2018 EESAST</Footer>
-            </Layout>
-          </Switch>
+          <Layout>
+            <AppHeader />
+            <Content className="App-content">
+              <Route exact path="/" component={MainPage} />
+              <Route path="/articles/:shortTitle" component={ArticlePage} />
+            </Content>
+            <Footer className="App-footer">© 2018 EESAST</Footer>
+          </Layout>
         </Router>
       </DocumentTitle>
     );
