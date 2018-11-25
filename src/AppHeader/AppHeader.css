@@ -6,13 +6,13 @@
   z-index: 1;
   width: 100%;
   display: flex;
-  top: 0;
-  transition: top 0.5s, box-shadow 0.5s;
+  transform: none;
+  transition: transform 0.5s;
 }
 
 .App-header-hidden {
   box-shadow: 0 0 0 0;
-  top: -64px;
+  transform: translateY(-64px);
 }
 
 .App-logo {
