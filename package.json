@@ -1,6 +1,6 @@
 {
   "name": "sast-app-web",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": true,
   "dependencies": {
     "antd": "latest",
@@ -14,9 +14,13 @@
     "react-infinite-scroller": "latest",
     "react-router-dom": "latest",
     "react-scripts": "latest",
-    "react-app-rewired": "latest",
     "react-app-rewire-less": "latest",
     "babel-plugin-import": "latest"
+  },
+  "devDependencies": {
+    "react-app-rewired": "latest",
+    "enzyme": "^3.7.0",
+    "enzyme-adapter-react-16": "^1.7.0"
   },
   "scripts": {
     "start": "react-app-rewired start",
@@ -26,6 +30,13 @@
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "jest": {
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/src/index.js",
+      "/src/serviceWorker.js"
+    ]
   },
   "browserslist": [
     ">0.2%",
