@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import { BackTop, Card, Menu, Icon, Input, Button, Upload, Modal } from "antd";
-import axios from "axios";
+import { BackTop, Card, Menu, Icon, Input, Button, Modal } from "antd";
 import hljs from "highlight.js";
 import DOMPurify from "dompurify";
 import Marked from "marked";
 import DocumentTitle from "react-document-title";
+import MultipleUpload from "../MultipleUpload/MultipleUpload";
 import "./EditPage.css";
 import "../github-markdown.css";
 import "highlight.js/styles/github.css";
@@ -19,27 +19,6 @@ Marked.setOptions({
   sanitize: true,
   sanitizer: DOMPurify.sanitize
 });
-
-const fileList = [
-  {
-    uid: "-1",
-    name: "xxx.png",
-    status: "done",
-    url:
-      "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    thumbUrl:
-      "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-  },
-  {
-    uid: "-2",
-    name: "yyy.png",
-    status: "done",
-    url:
-      "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    thumbUrl:
-      "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-  }
-];
 
 class EditPage extends Component {
   constructor(props) {
@@ -186,24 +165,20 @@ class EditPage extends Component {
                 value={this.state.alias}
                 onChange={this.handleInputChange}
               />
-              <div className="input">
-                <Upload
-                  action="//jsonplaceholder.typicode.com/posts/"
-                  listType="picture-card"
-                  fileList={fileList}
-                  multiple
-                >
-                  <Button icon="picture">插入图片</Button>
-                </Upload>
+              <div className="input" style={{ display: "inline-block" }}>
+                <MultipleUpload uploadPrompt="上传题图" maxUpload={1} />
               </div>
               <p>
-                上传完所需图片后，右键“预览图片图标”复制地址，作为 Markdown
-                内图片的真实链接。
+                点击“插入图片”，会在当前光标处自动插入 Markdown
+                语句以添加相应图片。
               </p>
               <p>
                 在最终上传 Markdown
                 文本前，请点击“删除图片图标”将未用到的图片删除，并提前预览确保展示效果。
               </p>
+              <div className="input">
+                <MultipleUpload afterUpload={this.handleInsertPicture} />
+              </div>
               <TextArea
                 style={{ resize: "none" }}
                 name="article"
