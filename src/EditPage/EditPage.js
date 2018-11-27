@@ -55,6 +55,7 @@ class EditPage extends Component {
       },
       currentPage: "edit"
     };
+    this.textareaRef = React.createRef();
   }
 
   handleMenuClick = e => {
@@ -82,14 +83,25 @@ class EditPage extends Component {
     });
   };
 
+  handleInsertPicture = picture => {
+    const ref = this.textareaRef.current.textAreaRef;
+    const selectionStart = ref.selectionStart;
+    const selectionEnd = ref.selectionEnd;
+    const article = this.state.article;
+
+    this.setState({
+      article:
+        article.substring(0, selectionStart) +
+        (selectionEnd === selectionStart ? "\n" : `\n\n`) +
+        `![${picture.name}](${picture.url})\n\n` +
+        article.substring(selectionEnd, article.length)
+    });
+  };
+
   handleRefresh = () => {
     sessionStorage.setItem("tmp-title", this.state.title);
     sessionStorage.setItem("tmp-alias", this.state.alias);
     sessionStorage.setItem("tmp-article", this.state.article);
-  };
-
-  handleInsertPicture = () => {
-    console.log(this.textareaRef.current.selectionStart);
   };
 
   handleSubmit = () => {
@@ -197,6 +209,7 @@ class EditPage extends Component {
                 name="article"
                 rows={10}
                 value={this.state.article}
+                ref={this.textareaRef}
                 onChange={this.handleInputChange}
               />
               <this.SubmitButton />
