@@ -1,26 +1,27 @@
 {
   "name": "sast-app-web",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "private": true,
   "dependencies": {
     "antd": "latest",
     "axios": "latest",
+    "babel-plugin-import": "latest",
     "dompurify": "latest",
     "highlight.js": "latest",
     "marked": "^0.5.2",
     "react": "latest",
+    "react-app-rewire-less": "latest",
     "react-document-title": "latest",
     "react-dom": "latest",
     "react-infinite-scroller": "latest",
     "react-router-dom": "latest",
-    "react-scripts": "latest",
-    "react-app-rewire-less": "latest",
-    "babel-plugin-import": "latest"
+    "react-scripts": "latest"
   },
   "devDependencies": {
-    "react-app-rewired": "latest",
+    "@types/jest": "^23.3.10",
     "enzyme": "^3.7.0",
-    "enzyme-adapter-react-16": "^1.7.0"
+    "enzyme-adapter-react-16": "^1.7.0",
+    "react-app-rewired": "latest"
   },
   "scripts": {
     "start": "react-app-rewired start",
