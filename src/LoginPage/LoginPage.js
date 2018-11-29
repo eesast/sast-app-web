@@ -1,6 +1,8 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 import { Form, Icon, Input, Button, Card } from "antd";
 import "./LoginPage.css";
+import { AuthContext } from "../AuthContext/AuthContext";
 import logo from "../assets/logo.png";
 
 const FormItem = Form.Item;
@@ -13,6 +15,9 @@ class LoginForm extends Component {
         console.log("Received values of form: ", values);
       }
     });
+
+    this.context.login();
+    this.props.history.goBack();
   };
 
   render() {
@@ -50,6 +55,7 @@ class LoginForm extends Component {
             type="primary"
             htmlType="submit"
             className="login-form-button"
+            onClick={this.handleSubmit}
           >
             登录
           </Button>
@@ -59,7 +65,12 @@ class LoginForm extends Component {
   }
 }
 
-const WrappedLoginForm = Form.create()(LoginForm);
+/**
+ * `hoist-non-react-statics` in `react-router` is old
+ * see "https://stackoverflow.com/questions/53240058/use-hoist-non-react-statics-with-withrouter"
+ */
+const WrappedLoginForm = withRouter(Form.create()(LoginForm));
+LoginForm.contextType = AuthContext;
 
 class LoginPage extends Component {
   render() {

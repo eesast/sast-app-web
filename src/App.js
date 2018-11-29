@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Layout } from "antd";
 import DocumentTitle from "react-document-title";
 import "./App.css";
+import AuthRoute from "./AuthRoute/AuthRoute";
+import { AuthProvider } from "./AuthContext/AuthContext";
 import AppHeader from "./AppHeader/AppHeader";
 import MainPage from "./MainPage/MainPage";
 import ArticlePage from "./ArticlePage/ArticlePage";
@@ -19,10 +21,12 @@ class App extends Component {
           <Layout>
             <AppHeader />
             <Content className="App-content">
-              <Route exact path="/" component={MainPage} />
-              <Route exact path="/edit" component={EditPage} />
-              <Route exact path="/login" component={LoginPage} />
-              <Route path="/articles/:shortTitle" component={ArticlePage} />
+              <AuthProvider>
+                <Route exact path="/" component={MainPage} />
+                <AuthRoute exact path="/edit" component={EditPage} />
+                <Route exact path="/login" component={LoginPage} />
+                <Route path="/articles/:shortTitle" component={ArticlePage} />
+              </AuthProvider>
             </Content>
             <Footer style={{ height: "64px" }} className="App-footer">
               © 2018 EESAST
