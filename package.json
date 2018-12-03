@@ -37,7 +37,9 @@
       "/node_modules/",
       "/src/index.js",
       "/src/serviceWorker.js"
-    ]
+    ],
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true
   },
   "browserslist": [
     ">0.2%",
