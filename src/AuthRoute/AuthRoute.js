@@ -4,11 +4,15 @@ import { AuthConsumer } from "../AuthContext/AuthContext";
 
 const AuthRoute = ({ component: Component, ...rest }) => (
   <AuthConsumer>
-    {({ auth, ...restContext }) => (
+    {({ isTokenValid, ...restContext }) => (
       <Route
         {...rest}
         render={props =>
-          auth ? <Component {...props} /> : <Redirect push to="/login" />
+          isTokenValid() ? (
+            <Component {...props} />
+          ) : (
+            <Redirect push to="/login" />
+          )
         }
       />
     )}

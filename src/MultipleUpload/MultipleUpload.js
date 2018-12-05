@@ -2,53 +2,63 @@ import React, { Component } from "react";
 import { Upload, Button, Modal } from "antd";
 import "./MultipleUpload.css";
 
-const fileList = [
-  {
-    uid: "-1",
-    name: "xxx.png",
-    status: "done",
-    url:
-      "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    thumbUrl:
-      "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-  }
-];
+const baseUrl =
+  process.env.NODE_ENV === "production"
+    ? "https://api.eesast.com"
+    : "http://localhost:28888";
 
 class MultipleUpload extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       previewVisible: false,
-      previewPicture: {
-        name: "",
-        url: ""
-      }
+      previewPictureName: "",
+      previewPictureUrl: ""
     };
   }
 
   handlePreview = file => {
-    this.setState({ previewPicture: file }, () => {
-      this.setState({ previewVisible: true });
-    });
+    this.setState(
+      {
+        previewPictureName: file.name,
+        previewPictureUrl: baseUrl + file.response
+      },
+      () => {
+        this.setState({ previewVisible: true });
+      }
+    );
+  };
+
+  handleRemove = file => {
+    this.props.handleRemove(file);
   };
 
   handlePreviewClose = () => {
     this.setState({ previewVisible: false });
-    this.props.afterUpload(this.state.previewPicture);
+  };
+
+  hanldeFilelistChange = change => {
+    const filelist = change.fileList;
+    this.props.handleFilelistChange(filelist);
   };
 
   render() {
     return (
       <div>
         <Upload
-          action="//jsonplaceholder.typicode.com/posts/"
+          action={baseUrl + "/static/images"}
+          headers={{
+            Authorization: "Bearer " + localStorage.getItem("token")
+          }}
           listType="picture-card"
-          fileList={fileList}
-          multiple
+          fileList={this.props.filelist}
+          onChange={this.hanldeFilelistChange}
           onPreview={this.handlePreview}
+          onRemove={this.handleRemove}
         >
           {this.props.maxUpload &&
-          fileList.length >= this.props.maxUpload ? null : (
+          this.props.filelist.length >= this.props.maxUpload ? null : (
             <Button icon="picture">
               {this.props.uploadPrompt || "插入图片"}
             </Button>
@@ -57,14 +67,14 @@ class MultipleUpload extends Component {
         <Modal
           centered
           footer={null}
-          title={this.state.previewPicture.name}
+          title={this.state.previewPictureName}
           visible={this.state.previewVisible}
           onCancel={this.handlePreviewClose}
         >
           <img
             style={{ width: "100%" }}
             alt="preview"
-            src={this.state.previewPicture.url}
+            src={this.state.previewPictureUrl}
           />
         </Modal>
       </div>

@@ -7,7 +7,7 @@ import ArticlePage from "./ArticlePage";
 it("renders without crashing", () => {
   const page = mount(
     <MemoryRouter initialEntries={["/articles/tensorflow-first-look"]}>
-      <Route path="/articles/:shortTitle" component={ArticlePage} />
+      <Route path="/articles/:alias" component={ArticlePage} />
     </MemoryRouter>
   );
   const documentTitle = page.find(DocumentTitle);

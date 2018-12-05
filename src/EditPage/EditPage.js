@@ -1,13 +1,19 @@
 import React, { Component } from "react";
-import { BackTop, Card, Menu, Icon, Input, Button, Modal } from "antd";
+import { BackTop, Card, Menu, Icon, Input, Button, Modal, message } from "antd";
 import hljs from "highlight.js";
 import DOMPurify from "dompurify";
 import Marked from "marked";
 import DocumentTitle from "react-document-title";
+import axios from "axios";
 import MultipleUpload from "../MultipleUpload/MultipleUpload";
 import "./EditPage.css";
 import "../github-markdown.css";
 import "highlight.js/styles/github.css";
+
+const baseUrl =
+  process.env.NODE_ENV === "production"
+    ? "https://api.eesast.com"
+    : "http://localhost:28888";
 
 const { TextArea } = Input;
 const confirm = Modal.confirm;
@@ -28,6 +34,8 @@ class EditPage extends Component {
       alias: "",
       article: "",
       author: "",
+      titleImageFilelist: [],
+      imageFilelist: [],
       loading: true,
       md: {
         __html: ""
@@ -62,25 +70,64 @@ class EditPage extends Component {
     });
   };
 
-  handleInsertPicture = picture => {
-    const ref = this.textareaRef.current.textAreaRef;
-    const selectionStart = ref.selectionStart;
-    const selectionEnd = ref.selectionEnd;
-    const article = this.state.article;
+  handleTitleImageChange = filelist => {
+    this.setState({ titleImageFilelist: filelist });
+  };
+
+  handleInsertPicture = filelist => {
+    let removed = false;
+    if (filelist.length < this.state.imageFilelist.length) removed = true;
 
     this.setState({
-      article:
-        article.substring(0, selectionStart) +
-        (selectionEnd === selectionStart ? "\n" : `\n\n`) +
-        `![${picture.name}](${picture.url})\n\n` +
-        article.substring(selectionEnd, article.length)
+      imageFilelist: filelist
+    });
+
+    const picture = filelist[filelist.length - 1];
+
+    if (picture && picture.response && !removed) {
+      const ref = this.textareaRef.current.textAreaRef;
+      const selectionStart = ref.selectionStart;
+      const selectionEnd = ref.selectionEnd;
+      const article = this.state.article;
+
+      this.setState({
+        article:
+          article.substring(0, selectionStart) +
+          (selectionEnd === selectionStart ? "\n" : `\n\n`) +
+          `![${picture.name}](${baseUrl + picture.response})\n\n` +
+          article.substring(selectionEnd, article.length)
+      });
+    }
+  };
+
+  handleFilelistRemove = file => {
+    return new Promise((resolve, reject) => {
+      axios
+        .delete(file.response)
+        .then(response => {
+          message.success("删除图片成功");
+          resolve(true);
+        })
+        .catch(error => {
+          message.error("删除图片失败");
+          resolve(false);
+        });
     });
   };
 
   handleRefresh = () => {
+    // TODO: delete all files uploaded
     sessionStorage.setItem("tmp-title", this.state.title);
     sessionStorage.setItem("tmp-alias", this.state.alias);
     sessionStorage.setItem("tmp-article", this.state.article);
+    sessionStorage.setItem(
+      "tmp-titleImage",
+      JSON.stringify(this.state.titleImageFilelist)
+    );
+    sessionStorage.setItem(
+      "tmp-images",
+      JSON.stringify(this.state.imageFilelist)
+    );
   };
 
   handleSubmit = () => {
@@ -101,7 +148,10 @@ class EditPage extends Component {
     this.setState({
       title: sessionStorage.getItem("tmp-title") || "",
       alias: sessionStorage.getItem("tmp-alias") || "",
-      article: sessionStorage.getItem("tmp-article") || ""
+      article: sessionStorage.getItem("tmp-article") || "",
+      titleImageFilelist:
+        JSON.parse(sessionStorage.getItem("tmp-titleImage")) || [],
+      imageFilelist: JSON.parse(sessionStorage.getItem("tmp-images")) || []
     });
     window.addEventListener("beforeunload", this.handleRefresh);
   };
@@ -166,7 +216,13 @@ class EditPage extends Component {
                 onChange={this.handleInputChange}
               />
               <div className="input" style={{ display: "inline-block" }}>
-                <MultipleUpload uploadPrompt="上传题图" maxUpload={1} />
+                <MultipleUpload
+                  uploadPrompt="上传题图"
+                  maxUpload={1}
+                  filelist={this.state.titleImageFilelist}
+                  handleFilelistChange={this.handleTitleImageChange}
+                  handleRemove={this.handleFilelistRemove}
+                />
               </div>
               <p>
                 点击“插入图片”，会在当前光标处自动插入 Markdown
@@ -177,7 +233,11 @@ class EditPage extends Component {
                 文本前，请点击“删除图片图标”将未用到的图片删除，并提前预览确保展示效果。
               </p>
               <div className="input">
-                <MultipleUpload afterUpload={this.handleInsertPicture} />
+                <MultipleUpload
+                  filelist={this.state.imageFilelist}
+                  handleFilelistChange={this.handleInsertPicture}
+                  handleRemove={this.handleFilelistRemove}
+                />
               </div>
               <TextArea
                 style={{ resize: "none" }}

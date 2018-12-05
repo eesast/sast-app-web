@@ -1,63 +1,58 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { List, BackTop, Spin } from "antd";
+import { List, BackTop, Spin, message } from "antd";
 import InfiniteScroll from "react-infinite-scroller";
 import axios from "axios";
 import "./MainPage.css";
 import PreviewCard from "../PreviewCard/PreviewCard";
 
-const fakeDataUrl =
-  "https://randomuser.me/api/?results=5&inc=name,gender,email,nat&noinfo";
-
 class MainPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      page: 1,
       data: [],
       loading: false,
       hasMore: true
     };
   }
 
-  getData = () => {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(fakeDataUrl)
-        .then(response => {
-          resolve(response.data);
-        })
-        .catch(error => reject(error));
-    });
-  };
-
   componentDidMount = () => {
-    this.getData().then(data => {
-      this.setState({
-        data: data.results
-      });
-    });
+    axios
+      .get("/v1/articles?begin=0&end=4&noContent=true")
+      .then(response => {
+        this.setState({ data: response.data });
+      })
+      .catch(error => message.error("文章加载失败"));
   };
 
   handleInfiniteLoadMore = () => {
+    const page = this.state.page;
     let data = this.state.data;
     this.setState({
       loading: true
     });
-    if (data.length > 14) {
-      this.setState({
-        hasMore: false,
-        loading: false
-      });
-      return;
-    }
-    this.getData().then(newData => {
-      data = data.concat(newData.results);
-      console.log(data);
-      this.setState({
-        data,
-        loading: false
-      });
-    });
+
+    axios
+      .get(`/v1/articles?begin=${page * 5}&end=${page * 5 + 4}&noContent=true`)
+      .then(response => {
+        data = data.concat(response.data);
+
+        if (response.data.length < 5) {
+          this.setState({
+            hasMore: false,
+            loading: false
+          });
+          return;
+        }
+
+        this.setState({
+          page: page + 1,
+          loading: false,
+          data
+        });
+      })
+      .catch(error => message.error("文章加载失败"));
   };
 
   render() {
@@ -77,8 +72,13 @@ class MainPage extends Component {
             dataSource={this.state.data}
             renderItem={item => (
               <List.Item className="ListItem" key={item.id}>
-                <Link to={`/articles/${item.email}`}>
-                  <PreviewCard loading={this.state.loading} />
+                <Link to={`/articles/${item.alias}`}>
+                  <PreviewCard
+                    loading={this.state.loading}
+                    image={item.image}
+                    title={item.title}
+                    abstract={item.abstract}
+                  />
                 </Link>
               </List.Item>
             )}

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BackTop, Card } from "antd";
+import { BackTop, Card, message } from "antd";
 import axios from "axios";
 import hljs from "highlight.js";
 import DOMPurify from "dompurify";
@@ -8,7 +8,6 @@ import DocumentTitle from "react-document-title";
 import "./ArticlePage.css";
 import "../github-markdown.css";
 import "highlight.js/styles/github.css";
-import ExampleMD from "./example.md";
 
 Marked.setOptions({
   highlight: code => {
@@ -18,14 +17,11 @@ Marked.setOptions({
   sanitizer: DOMPurify.sanitize
 });
 
-const fakeDataUrl =
-  "https://randomuser.me/api/?results=1&inc=name,gender,email,nat&noinfo";
-
 class ArticlePage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: {},
+      author: "",
       loading: true,
       md: {
         __html: ""
@@ -33,41 +29,36 @@ class ArticlePage extends Component {
     };
   }
 
-  getData = () => {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(fakeDataUrl)
-        .then(response => {
-          resolve(response.data);
-        })
-        .catch(error => reject(error));
-    });
-  };
-
   componentDidMount = () => {
-    this.getData().then(data => {
-      this.setState({
-        data: data.results[0]
-      });
-    });
+    const alias = this.props.match.params.alias;
     axios
-      .get(ExampleMD)
+      .get(`/v1/articles?alias=${alias}`)
       .then(response => {
-        this.setState({
-          md: {
-            __html: Marked(response.data)
-          },
-          loading: false
-        });
+        const data = response.data[0];
+
+        axios
+          .get(`/v1/users/${data.authorId}`)
+          .then(response => {
+            const author = response.data;
+
+            this.setState({
+              author: author.name,
+              md: {
+                __html: Marked(data.content)
+              },
+              loading: false
+            });
+          })
+          .catch(error => message.error("作者加载失败"));
       })
-      .catch(error => console.log(error));
+      .catch(error => message.error("文章加载失败"));
   };
 
   render() {
     return (
-      <DocumentTitle title={this.props.match.params.shortTitle}>
+      <DocumentTitle title={this.props.match.params.alias}>
         <div className="ArticlePage">
-          <Card loading={this.state.loading} title="Huang huang">
+          <Card loading={this.state.loading} title={this.state.author}>
             <article className="markdown-body">
               <div dangerouslySetInnerHTML={this.state.md} />
             </article>

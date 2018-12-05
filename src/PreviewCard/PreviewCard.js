@@ -18,16 +18,13 @@ class PreviewCard extends Component {
         cover={
           <img
             className="Card-img"
-            alt="TODO"
-            src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+            alt={this.props.title}
+            src={this.props.image}
           />
         }
         loading={this.props.loading}
       >
-        <Meta
-          title="Card title"
-          description="This is the descriptionThis is the descriptionThis is the descriptionThis is the descriptionThis is the descriptionThis is the descriptionThis is the descriptionThis is the descriptionThis is the descriptionThis is the descriptionThis is the descriptionThis is the descriptionThis is the descriptionThis is the descriptionThis is the descriptionThis is the descriptionThis is the descriptionThis is the descriptionThis is the descriptionThis is the descriptionThis is the descriptionThis is the descriptionThis is the descriptionThis is the descriptionThis is the descriptionThis is the descriptionThis is the descriptionThis is the descriptionThis is the descriptionThis is the descriptionThis is the descriptionThis is the description"
-        />
+        <Meta title={this.props.title} description={this.props.abstract} />
       </Card>
     );
   }
