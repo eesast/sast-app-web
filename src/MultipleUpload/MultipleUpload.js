@@ -19,9 +19,12 @@ class MultipleUpload extends Component {
   }
 
   handlePreview = file => {
+    let filename = file.name;
+    filename = filename.length > 15 ? `${filename.slice(0, 15)}...` : filename;
+
     this.setState(
       {
-        previewPictureName: file.name,
+        previewPictureName: filename,
         previewPictureUrl: baseUrl + file.response
       },
       () => {
@@ -31,7 +34,7 @@ class MultipleUpload extends Component {
   };
 
   handleRemove = file => {
-    this.props.handleRemove(file);
+    return this.props.handleRemove(file);
   };
 
   handlePreviewClose = () => {
@@ -45,7 +48,7 @@ class MultipleUpload extends Component {
 
   render() {
     return (
-      <div>
+      <div className="MultipleUpload">
         <Upload
           action={baseUrl + "/static/images"}
           headers={{

@@ -1,19 +1,28 @@
 import React, { Component } from "react";
-import { BackTop, Card, Menu, Icon, Input, Button, Modal, message } from "antd";
+import { withRouter } from "react-router-dom";
+import {
+  BackTop,
+  Card,
+  Menu,
+  Icon,
+  Input,
+  Button,
+  Modal,
+  message,
+  Tag,
+  Tooltip
+} from "antd";
 import hljs from "highlight.js";
 import DOMPurify from "dompurify";
 import Marked from "marked";
 import DocumentTitle from "react-document-title";
 import axios from "axios";
+import { AuthContext } from "../AuthContext/AuthContext";
 import MultipleUpload from "../MultipleUpload/MultipleUpload";
+import baseUrl from "../config/baseUrl";
 import "./EditPage.css";
 import "../github-markdown.css";
 import "highlight.js/styles/github.css";
-
-const baseUrl =
-  process.env.NODE_ENV === "production"
-    ? "https://api.eesast.com"
-    : "http://localhost:28888";
 
 const { TextArea } = Input;
 const confirm = Modal.confirm;
@@ -32,7 +41,7 @@ class EditPage extends Component {
     this.state = {
       title: "",
       alias: "",
-      article: "",
+      content: "",
       author: "",
       titleImageFilelist: [],
       imageFilelist: [],
@@ -40,10 +49,40 @@ class EditPage extends Component {
       md: {
         __html: ""
       },
-      currentPage: "edit"
+      currentPage: "edit",
+      tags: [],
+      tagInputVisible: false,
+      tagInputValue: ""
     };
     this.textareaRef = React.createRef();
+    this.tagInputRef = React.createRef();
   }
+
+  handleTagRemove = removedTag => {
+    const tags = this.state.tags.filter(tag => tag !== removedTag);
+    this.setState({ tags });
+  };
+
+  handleTagInputShow = () => {
+    this.setState({ tagInputVisible: true }, () =>
+      this.tagInputRef.current.focus()
+    );
+  };
+
+  handleTagInputConfirm = () => {
+    const state = this.state;
+    const inputValue = state.tagInputValue;
+    let tags = state.tags;
+    if (inputValue && tags.indexOf(inputValue) === -1) {
+      tags = [...tags, inputValue];
+    }
+
+    this.setState({
+      tags,
+      tagInputVisible: false,
+      tagInputValue: ""
+    });
+  };
 
   handleMenuClick = e => {
     this.setState({
@@ -53,7 +92,7 @@ class EditPage extends Component {
     if (e.key === "preview") {
       this.setState({
         md: {
-          __html: Marked(this.state.article)
+          __html: Marked(this.state.content)
         },
         loading: false
       });
@@ -88,14 +127,14 @@ class EditPage extends Component {
       const ref = this.textareaRef.current.textAreaRef;
       const selectionStart = ref.selectionStart;
       const selectionEnd = ref.selectionEnd;
-      const article = this.state.article;
+      const content = this.state.content;
 
       this.setState({
-        article:
-          article.substring(0, selectionStart) +
+        content:
+          content.substring(0, selectionStart) +
           (selectionEnd === selectionStart ? "\n" : `\n\n`) +
           `![${picture.name}](${baseUrl + picture.response})\n\n` +
-          article.substring(selectionEnd, article.length)
+          content.substring(selectionEnd, content.length)
       });
     }
   };
@@ -116,10 +155,10 @@ class EditPage extends Component {
   };
 
   handleRefresh = () => {
-    // TODO: delete all files uploaded
     sessionStorage.setItem("tmp-title", this.state.title);
     sessionStorage.setItem("tmp-alias", this.state.alias);
-    sessionStorage.setItem("tmp-article", this.state.article);
+    sessionStorage.setItem("tmp-content", this.state.content);
+    sessionStorage.setItem("tmp-abstract", this.state.abstract);
     sessionStorage.setItem(
       "tmp-titleImage",
       JSON.stringify(this.state.titleImageFilelist)
@@ -128,18 +167,63 @@ class EditPage extends Component {
       "tmp-images",
       JSON.stringify(this.state.imageFilelist)
     );
+    sessionStorage.setItem("tmp-tags", JSON.stringify(this.state.tags));
   };
 
   handleSubmit = () => {
+    const title = this.state.title;
+    const alias = this.state.alias;
+    const abstract = this.state.abstract;
+    const tags = this.state.tags;
+    const content = this.state.content;
+    if (
+      title === "" ||
+      alias === "" ||
+      abstract === "" ||
+      tags.length === 0 ||
+      content === ""
+    ) {
+      message.error("请完整填写所有内容");
+      return;
+    }
+
+    const image = this.state.titleImageFilelist[0];
+    if (!image) {
+      message.error("请上传题图");
+      return;
+    }
+    const authorId = this.context.decodeToken().id;
+    if (!authorId) {
+      message.error("请重新登录");
+      return;
+    }
+
     confirm({
       title: "发布文章",
       content:
         "请在发布前预览 Markdown，确保文章完整可读。\n确定发布该文章吗？",
       onOk: () => {
         return new Promise((resolve, reject) => {
-          setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-          // clear sessionStorage
-        }).catch(() => console.log("Oops errors!"));
+          axios
+            .post("/v1/articles", {
+              title,
+              alias,
+              authorId,
+              abstract,
+              image: image.response,
+              content,
+              tags
+            })
+            .then(response => {
+              message.success("文章发布成功");
+              sessionStorage.clear();
+              this.props.history.replace(`/articles/${alias}`);
+              resolve(true);
+            })
+            .catch(error => {
+              reject(error);
+            });
+        }).catch(error => message.error("文章发布失败，请重试"));
       }
     });
   };
@@ -148,10 +232,12 @@ class EditPage extends Component {
     this.setState({
       title: sessionStorage.getItem("tmp-title") || "",
       alias: sessionStorage.getItem("tmp-alias") || "",
-      article: sessionStorage.getItem("tmp-article") || "",
+      content: sessionStorage.getItem("tmp-content") || "",
+      abstract: sessionStorage.getItem("tmp-abstract") || "",
       titleImageFilelist:
         JSON.parse(sessionStorage.getItem("tmp-titleImage")) || [],
-      imageFilelist: JSON.parse(sessionStorage.getItem("tmp-images")) || []
+      imageFilelist: JSON.parse(sessionStorage.getItem("tmp-images")) || [],
+      tags: JSON.parse(sessionStorage.getItem("tmp-tags")) || []
     });
     window.addEventListener("beforeunload", this.handleRefresh);
   };
@@ -169,6 +255,52 @@ class EditPage extends Component {
       >
         发布文章
       </Button>
+    );
+  };
+
+  Tags = () => {
+    return (
+      <div style={{ marginTop: "12px" }}>
+        {this.state.tags.map(tag => {
+          const isLongTag = tag.length > 20;
+          const tagElem = (
+            <Tag
+              key={tag}
+              closable
+              afterClose={() => this.handleTagRemove(tag)}
+            >
+              {isLongTag ? `${tag.slice(0, 20)}...` : tag}
+            </Tag>
+          );
+          return isLongTag ? (
+            <Tooltip title={tag} key={tag}>
+              {tagElem}
+            </Tooltip>
+          ) : (
+            tagElem
+          );
+        })}
+        {this.state.tagInputVisible && (
+          <Input
+            name="tagInputValue"
+            ref={this.tagInputRef}
+            type="text"
+            style={{ width: 78 }}
+            value={this.state.tagInputValue}
+            onChange={this.handleInputChange}
+            onBlur={this.handleTagInputConfirm}
+            onPressEnter={this.handleTagInputConfirm}
+          />
+        )}
+        {!this.state.tagInputVisible && (
+          <Tag
+            onClick={this.handleTagInputShow}
+            style={{ background: "#fff", borderStyle: "dashed" }}
+          >
+            <Icon type="plus" /> 新标签
+          </Tag>
+        )}
+      </div>
     );
   };
 
@@ -215,7 +347,16 @@ class EditPage extends Component {
                 value={this.state.alias}
                 onChange={this.handleInputChange}
               />
-              <div className="input" style={{ display: "inline-block" }}>
+              <TextArea
+                style={{ resize: "none" }}
+                name="abstract"
+                placeholder="文章摘要"
+                autosize={{ minRows: 3 }}
+                value={this.state.abstract}
+                onChange={this.handleInputChange}
+              />
+              <this.Tags />
+              <div style={{ display: "inline-block" }}>
                 <MultipleUpload
                   uploadPrompt="上传题图"
                   maxUpload={1}
@@ -232,7 +373,7 @@ class EditPage extends Component {
                 在最终上传 Markdown
                 文本前，请点击“删除图片图标”将未用到的图片删除，并提前预览确保展示效果。
               </p>
-              <div className="input">
+              <div>
                 <MultipleUpload
                   filelist={this.state.imageFilelist}
                   handleFilelistChange={this.handleInsertPicture}
@@ -241,9 +382,9 @@ class EditPage extends Component {
               </div>
               <TextArea
                 style={{ resize: "none" }}
-                name="article"
-                rows={10}
-                value={this.state.article}
+                name="content"
+                rows={15}
+                value={this.state.content}
                 ref={this.textareaRef}
                 onChange={this.handleInputChange}
               />
@@ -265,4 +406,6 @@ class EditPage extends Component {
   }
 }
 
-export default EditPage;
+const WrappedEditPage = withRouter(EditPage);
+EditPage.contextType = AuthContext;
+export default WrappedEditPage;
