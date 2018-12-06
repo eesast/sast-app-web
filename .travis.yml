@@ -8,3 +8,6 @@ script:
   - npm run build
   - npm test
   - codecov
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker build -t yingrui205/sast-app-web .
+  - docker push yingrui205/sast-app-web
