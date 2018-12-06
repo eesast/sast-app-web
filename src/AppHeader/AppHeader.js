@@ -6,6 +6,7 @@ import logo from "../assets/logo.png";
 import AppDrawer from "../AppDrawer/AppDrawer";
 
 const { Header } = Layout;
+const SubMenu = Menu.SubMenu;
 
 class AppHeader extends Component {
   state = {
@@ -99,6 +100,14 @@ class AppHeader extends Component {
           <Menu.Item key="0">
             <Link to="/">文章</Link>
           </Menu.Item>
+          <SubMenu title="资源">
+            <Menu.Item key="1">
+              <Link to="/resources">活动室</Link>
+            </Menu.Item>
+            <Menu.Item key="2">
+              <Link to="/resources">设备</Link>
+            </Menu.Item>
+          </SubMenu>
         </Menu>
         <div className="App-actions">
           <Link to="/edit">
