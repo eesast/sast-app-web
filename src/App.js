@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Layout, LocaleProvider } from "antd";
 import DocumentTitle from "react-document-title";
+import axios from "axios";
 import "./App.css";
 import zhCN from "antd/lib/locale-provider/zh_CN";
 import AuthRoute from "./AuthRoute/AuthRoute";
@@ -12,12 +13,9 @@ import ArticlePage from "./ArticlePage/ArticlePage";
 import EditPage from "./EditPage/EditPage";
 import LoginPage from "./LoginPage/LoginPage";
 import ResourcePage from "./ResourcePage/ResourcePage";
-import axios from "axios";
+import baseURL from "./config/baseUrl";
 
-axios.defaults.baseURL =
-  process.env.NODE_ENV === "production"
-    ? "https://api.eesast.com"
-    : "http://localhost:28888";
+axios.defaults.baseURL = baseURL;
 axios.defaults.headers.common["Authorization"] =
   "Bearer " + localStorage.getItem("token");
 

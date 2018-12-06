@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Card } from "antd";
 import "./PreviewCard.css";
+import baseUrl from "../config/baseUrl";
 
 const { Meta } = Card;
 
@@ -19,7 +20,7 @@ class PreviewCard extends Component {
           <img
             className="Card-img"
             alt={this.props.title}
-            src={this.props.image}
+            src={baseUrl + this.props.image}
           />
         }
         loading={this.props.loading}
