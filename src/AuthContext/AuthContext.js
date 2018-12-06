@@ -7,10 +7,19 @@ const AuthContext = React.createContext();
 
 class AuthProvider extends Component {
   state = {
+    decodeToken: () => {
+      try {
+        const token = localStorage.getItem("token");
+        return jwtDecode(token);
+      } catch (err) {
+        return {};
+      }
+    },
     isTokenValid: () => {
       try {
         const token = localStorage.getItem("token");
         const decoded = jwtDecode(token);
+
         if (decoded.exp < Date.now() / 1000) {
           return false;
         } else {
