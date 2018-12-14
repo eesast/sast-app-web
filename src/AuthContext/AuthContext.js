@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 import { message } from "antd";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
@@ -56,7 +57,7 @@ class AuthProvider extends Component {
     },
     logout: () => {
       localStorage.removeItem("token");
-      window.location.reload();
+      this.props.history.push("/");
     }
   };
 
@@ -70,5 +71,6 @@ class AuthProvider extends Component {
 }
 
 const AuthConsumer = AuthContext.Consumer;
+AuthProvider = withRouter(AuthProvider);
 
 export { AuthContext, AuthProvider, AuthConsumer };

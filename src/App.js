@@ -27,21 +27,21 @@ class App extends Component {
       <LocaleProvider locale={zhCN}>
         <DocumentTitle title="SAST Weekly">
           <Router>
-            <Layout>
-              <AppHeader />
-              <Content className="App-content">
-                <AuthProvider>
+            <AuthProvider>
+              <Layout>
+                <AppHeader />
+                <Content className="App-content">
                   <Route exact path="/" component={MainPage} />
                   <AuthRoute exact path="/edit" component={EditPage} />
                   <AuthRoute exact path="/resources" component={ResourcePage} />
                   <Route exact path="/login" component={LoginPage} />
                   <Route path="/articles/:alias" component={ArticlePage} />
-                </AuthProvider>
-              </Content>
-              <Footer style={{ height: "64px" }} className="App-footer">
-                © 2018 EESAST
-              </Footer>
-            </Layout>
+                </Content>
+                <Footer style={{ height: "64px" }} className="App-footer">
+                  © 2018 EESAST
+                </Footer>
+              </Layout>
+            </AuthProvider>
           </Router>
         </DocumentTitle>
       </LocaleProvider>
