@@ -20,7 +20,7 @@ class MultipleUpload extends Component {
 
   handlePreview = file => {
     let filename = file.name;
-    filename = filename.length > 15 ? `${filename.slice(0, 15)}...` : filename;
+    filename = filename.length > 50 ? `${filename.slice(0, 50)}...` : filename;
 
     this.setState(
       {
