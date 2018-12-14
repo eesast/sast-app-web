@@ -14,6 +14,7 @@ import EditPage from "./EditPage/EditPage";
 import LoginPage from "./LoginPage/LoginPage";
 import RegisterPage from "./RegisterPage/RegisterPage";
 import ResourcePage from "./ResourcePage/ResourcePage";
+import ProfilePage from "./ProfilePage/ProfilePage"
 import baseURL from "./config/baseUrl";
 
 axios.defaults.baseURL = baseURL;
@@ -37,6 +38,7 @@ class App extends Component {
                   <AuthRoute exact path="/resources" component={ResourcePage} />
                   <Route exact path="/login" component={LoginPage} />
                   <Route exact path="/register" component={RegisterPage} />
+                  <AuthRoute exact path="/profile" component={ProfilePage} />
                   <Route path="/articles/:alias" component={ArticlePage} />
                 </Content>
                 <Footer style={{ height: "64px" }} className="App-footer">
