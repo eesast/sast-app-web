@@ -223,7 +223,13 @@ class EditPage extends Component {
             .catch(error => {
               reject(error);
             });
-        }).catch(error => message.error("文章发布失败，请重试"));
+        }).catch(error => {
+          if (error.response.status === 401) {
+            message.error("权限不足");
+          } else {
+            message.error("文章发布失败，请重试");
+          }
+        });
       }
     });
   };
