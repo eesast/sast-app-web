@@ -6,15 +6,23 @@ import AuthRoute from "./AuthRoute";
 
 it("goes to login page when not authed", () => {
   const wrapper = mount(
-    <AuthProvider>
-      <MemoryRouter initialEntries={["/protected"]}>
-        <AuthRoute path="/protected" component={<div>logged in</div>} />
-      </MemoryRouter>
-    </AuthProvider>
+    <MemoryRouter>
+      <AuthProvider>
+        <MemoryRouter initialEntries={["/protected"]}>
+          <AuthRoute path="/protected" component={<div>logged in</div>} />
+        </MemoryRouter>
+      </AuthProvider>
+    </MemoryRouter>
   );
 
-  wrapper.setState({ auth: false });
-  expect(wrapper.find("Router").prop("history").location.pathname).toBe(
-    "/login"
-  );
+  wrapper
+    .childAt(0)
+    .instance()
+    .setState({ auth: false });
+  expect(
+    wrapper
+      .find("Router")
+      .at(1)
+      .prop("history").location.pathname
+  ).toBe("/login");
 });
