@@ -12,6 +12,7 @@ import MainPage from "./MainPage/MainPage";
 import ArticlePage from "./ArticlePage/ArticlePage";
 import EditPage from "./EditPage/EditPage";
 import LoginPage from "./LoginPage/LoginPage";
+import RegisterPage from "./RegisterPage/RegisterPage";
 import ResourcePage from "./ResourcePage/ResourcePage";
 import baseURL from "./config/baseUrl";
 
@@ -35,6 +36,7 @@ class App extends Component {
                   <AuthRoute exact path="/edit" component={EditPage} />
                   <AuthRoute exact path="/resources" component={ResourcePage} />
                   <Route exact path="/login" component={LoginPage} />
+                  <Route exact path="/register" component={RegisterPage} />
                   <Route path="/articles/:alias" component={ArticlePage} />
                 </Content>
                 <Footer style={{ height: "64px" }} className="App-footer">

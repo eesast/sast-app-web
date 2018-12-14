@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { Layout, Menu, Button } from "antd";
+import { Layout, Menu, Button, Dropdown } from "antd";
 import "./AppHeader.css";
 import logo from "../assets/logo.png";
 import AppDrawer from "../AppDrawer/AppDrawer";
+import { AuthContext } from "../AuthContext/AuthContext";
 
 const { Header } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -12,34 +13,10 @@ class AppHeader extends Component {
   state = {
     headerStyle: "App-header",
     scrollPos: 0,
-    newFormVisible: false,
     drawerVisible: false
   };
 
-  handleNewFormClick = () => {
-    this.setState({ newFormVisible: true });
-  };
-
-  handleNewFormCancel = () => {
-    this.setState({ newFormVisible: false });
-  };
-
-  handleFormCreate = () => {
-    const form = this.formRef.props.form;
-    form.validateFields((err, values) => {
-      if (err) {
-        return;
-      }
-
-      console.log("Received values of form: ", values);
-      form.resetFields();
-      this.setState({ newFormVisible: false });
-    });
-  };
-
-  saveFormRef = formRef => {
-    this.formRef = formRef;
-  };
+  static contextType = AuthContext;
 
   handleScroll = () => {
     const currentScrollPos = window.pageYOffset;
@@ -78,6 +55,17 @@ class AppHeader extends Component {
   };
 
   render() {
+    const dropdownMenu = (
+      <Menu onClick={this.handleDropdownMenuClick}>
+        <Menu.Item key="0">
+          <Link to="/profile">个人信息</Link>
+        </Menu.Item>
+        <Menu.Item key="1" onClick={this.context.logout}>
+          退出登录
+        </Menu.Item>
+      </Menu>
+    );
+
     return (
       <Header className={this.state.headerStyle} id="App-header">
         <Button
@@ -113,9 +101,9 @@ class AppHeader extends Component {
           <Link to="/edit">
             <Button ghost icon="form" />
           </Link>
-          <Link to="/login">
+          <Dropdown overlay={dropdownMenu}>
             <Button ghost icon="user" />
-          </Link>
+          </Dropdown>
         </div>
         <AppDrawer
           visible={this.state.drawerVisible}

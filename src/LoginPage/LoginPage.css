@@ -26,6 +26,10 @@
   width: 100%;
 }
 
+.login-form-register {
+  float: left;
+}
+
 .login-form-forgot {
   float: right;
 }

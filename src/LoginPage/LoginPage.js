@@ -47,6 +47,9 @@ class LoginForm extends Component {
           )}
         </FormItem>
         <FormItem>
+          <a className="login-form-register" href="/register">
+            注册
+          </a>
           <a className="login-form-forgot" href="1">
             忘记密码
           </a>

@@ -1,0 +1,30 @@
+.RegisterPage {
+  margin-top: 48px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 60vw;
+  display: flex;
+  justify-content: center;
+}
+
+.register-card {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 48px;
+  padding-right: 48px;
+  min-width: 80%;
+}
+
+@media screen and (max-width: 480px) {
+  .RegisterPage {
+    margin-top: 64px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100vw;
+  }
+
+  .register-card {
+    min-width: 100vw;
+    min-height: calc(100vh - 64px - 64px);
+  }
+}
