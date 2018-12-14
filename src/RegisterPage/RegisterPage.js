@@ -165,7 +165,7 @@ class RegistrationForm extends React.Component {
                 validator: this.validateId
               }
             ]
-          })(<Input onBlur={this.handleConfirmBlur} />)}
+          })(<Input />)}
         </FormItem>
         <FormItem
           {...formItemLayout}
