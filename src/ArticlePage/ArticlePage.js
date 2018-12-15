@@ -22,12 +22,24 @@ class ArticlePage extends Component {
     super(props);
     this.state = {
       author: "",
+      title: "",
       loading: true,
       md: {
         __html: ""
       }
     };
   }
+
+  componentWillMount = () => {
+    const ua = navigator.userAgent.toLowerCase();
+    if (/micromessenger/.test(ua)) {
+      const reloadTime = sessionStorage.getItem("reload-time") || "0";
+      if (reloadTime !== "1") {
+        sessionStorage.setItem("reload-time", "1");
+        window.location.reload();
+      }
+    }
+  };
 
   componentDidMount = () => {
     const alias = this.props.match.params.alias;
@@ -42,6 +54,7 @@ class ArticlePage extends Component {
             const author = response.data;
 
             this.setState({
+              title: data.title,
               author: author.name,
               md: {
                 __html: Marked(data.content)
@@ -56,7 +69,7 @@ class ArticlePage extends Component {
 
   render() {
     return (
-      <DocumentTitle title={this.props.match.params.alias}>
+      <DocumentTitle title={"SAST Weekly | " + this.state.title}>
         <div className="ArticlePage">
           <Card loading={this.state.loading} title={this.state.author}>
             <article className="markdown-body">
