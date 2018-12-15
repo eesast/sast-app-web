@@ -20,7 +20,7 @@ class AppHeader extends Component {
 
   handleScroll = () => {
     const currentScrollPos = window.pageYOffset;
-    const delay = 24;
+    const delay = 12;
     const topOffset = 12;
 
     if (
