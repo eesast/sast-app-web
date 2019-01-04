@@ -45,7 +45,7 @@ class ArticlePage extends Component {
   componentDidMount = () => {
     const alias = this.props.match.params.alias;
     axios
-      .get(`/v1/articles?alias=${alias}`)
+      .get(`/v1/articles?alias=${alias}&imvisible=true`)
       .then(response => {
         const data = response.data[0];
 
@@ -62,6 +62,8 @@ class ArticlePage extends Component {
               },
               loading: false
             });
+
+            if (!data.visible) message.info("您正在预览未发布的文章");
           })
           .catch(error => message.error("作者加载失败"));
       })
