@@ -33,6 +33,7 @@ class ArticlePage extends Component {
   componentWillMount = () => {
     const ua = navigator.userAgent.toLowerCase();
     if (/micromessenger/.test(ua)) {
+      // TODO: clear when leaving the page
       const reloadTime = sessionStorage.getItem("reload-time") || "0";
       if (reloadTime !== "1") {
         sessionStorage.setItem("reload-time", "1");
@@ -69,7 +70,13 @@ class ArticlePage extends Component {
 
   render() {
     return (
-      <DocumentTitle title={"SAST Weekly | " + this.state.title}>
+      <DocumentTitle
+        title={
+          this.state.title === ""
+            ? "SAST Weekly"
+            : "SAST Weekly | " + this.state.title
+        }
+      >
         <div className="ArticlePage">
           <Card loading={this.state.loading} title={this.state.author}>
             <article className="markdown-body">
