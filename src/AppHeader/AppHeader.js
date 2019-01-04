@@ -13,7 +13,9 @@ class AppHeader extends Component {
   state = {
     headerStyle: "App-header",
     scrollPos: 0,
-    drawerVisible: false
+    drawerVisible: false,
+    manageIconVisible: false,
+    editIconVisible: false
   };
 
   static contextType = AuthContext;
@@ -48,6 +50,13 @@ class AppHeader extends Component {
 
   componentDidMount = () => {
     window.addEventListener("scroll", this.handleScroll);
+
+    const decoded = this.context.decodeToken();
+    if (decoded && decoded.role === "writer")
+      this.setState({ editIconVisible: true });
+    if (decoded && decoded.role === "root") {
+      this.setState({ editIconVisible: true, manageIconVisible: true });
+    }
   };
 
   componentWillUnmount = () => {
@@ -98,7 +107,10 @@ class AppHeader extends Component {
           </SubMenu>
         </Menu>
         <div className="App-actions">
-          <Link to="/edit">
+          <Link to="/manage" hidden={!this.state.manageIconVisible}>
+            <Button ghost icon="safety" />
+          </Link>
+          <Link to="/edit" hidden={!this.state.editIconVisible}>
             <Button ghost icon="form" />
           </Link>
           <Dropdown overlay={dropdownMenu}>
