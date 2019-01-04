@@ -14,7 +14,8 @@ import EditPage from "./EditPage/EditPage";
 import LoginPage from "./LoginPage/LoginPage";
 import RegisterPage from "./RegisterPage/RegisterPage";
 import ResourcePage from "./ResourcePage/ResourcePage";
-import ProfilePage from "./ProfilePage/ProfilePage"
+import ProfilePage from "./ProfilePage/ProfilePage";
+import ManagePage from "./ManagePage/ManagePage";
 import baseURL from "./config/baseUrl";
 
 axios.defaults.baseURL = baseURL;
@@ -34,7 +35,13 @@ class App extends Component {
                 <AppHeader />
                 <Content className="App-content">
                   <Route exact path="/" component={MainPage} />
-                  <AuthRoute exact path="/edit" component={EditPage} />
+                  <Route exact path="/manage" component={ManagePage} />
+                  <AuthRoute
+                    exact
+                    path="/edit"
+                    component={EditPage}
+                    authenticate={["writer", "root"]}
+                  />
                   <AuthRoute exact path="/resources" component={ResourcePage} />
                   <Route exact path="/login" component={LoginPage} />
                   <Route exact path="/register" component={RegisterPage} />

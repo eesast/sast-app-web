@@ -1,0 +1,9 @@
+.ManagePage {
+  margin-top: 48px;
+}
+
+@media screen and (max-width: 480px) {
+  .ManagePage {
+    margin-top: 64px;
+  }
+}
