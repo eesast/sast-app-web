@@ -13,7 +13,7 @@ import ArticlePage from "./ArticlePage/ArticlePage";
 import EditPage from "./EditPage/EditPage";
 import LoginPage from "./LoginPage/LoginPage";
 import RegisterPage from "./RegisterPage/RegisterPage";
-import ResourcePage from "./ResourcePage/ResourcePage";
+import ResourceRoomPage from "./ResourceRoomPage/ResourceRoomPage";
 import ProfilePage from "./ProfilePage/ProfilePage";
 import ManagePage from "./ManagePage/ManagePage";
 import baseURL from "./config/baseUrl";
@@ -35,14 +35,23 @@ class App extends Component {
                 <AppHeader />
                 <Content className="App-content">
                   <Route exact path="/" component={MainPage} />
-                  <Route exact path="/manage" component={ManagePage} />
+                  <AuthRoute
+                    exact
+                    path="/manage"
+                    component={ManagePage}
+                    authenticate={["root"]}
+                  />
                   <AuthRoute
                     exact
                     path="/edit"
                     component={EditPage}
                     authenticate={["writer", "root"]}
                   />
-                  <AuthRoute exact path="/resources" component={ResourcePage} />
+                  <AuthRoute
+                    exact
+                    path="/resources/room"
+                    component={ResourceRoomPage}
+                  />
                   <Route exact path="/login" component={LoginPage} />
                   <Route exact path="/register" component={RegisterPage} />
                   <AuthRoute exact path="/profile" component={ProfilePage} />
