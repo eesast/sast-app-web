@@ -5,35 +5,36 @@ import {
   Modal,
   Steps,
   Button,
-  message,
+  Input,
   TimePicker
 } from "antd";
 import moment from "moment";
 import "moment/locale/zh-cn";
-import "./ResourcePage.css";
+import "./ResourceRoomPage.css";
 
 moment.locale("zh-cn");
 
 const Step = Steps.Step;
+const TextArea = Input.TextArea;
 
 const steps = [
   {
-    title: "First",
-    content: "First-content"
+    title: "选择时间",
+    description: "..."
   },
   {
-    title: "Second",
-    content: "Second-content"
+    title: "预约说明",
+    description: "..."
   },
   {
-    title: "Last",
-    content: "Last-content"
+    title: "完成预约",
+    description: "..."
   }
 ];
 
-class ResourcePage extends Component {
+class ResourceRoomPage extends Component {
   state = {
-    value: moment("2017-01-25"),
+    value: moment(),
     formVisible: false,
     current: 0
   };
@@ -71,7 +72,7 @@ class ResourcePage extends Component {
   render() {
     const { current } = this.state;
     return (
-      <div className="ResourcePage">
+      <div className="ResourceRoomPage">
         <Calendar
           value={this.state.value}
           onSelect={this.handleFormOpen}
@@ -86,29 +87,29 @@ class ResourcePage extends Component {
           <div>
             <Steps current={current}>
               {steps.map(item => (
-                <Step key={item.title} title={item.title} />
+                <Step
+                  key={item.title}
+                  title={item.title}
+                  description={item.description}
+                />
               ))}
             </Steps>
             <div className="steps-content">
-              <TimePicker minuteStep={15} secondStep={10} />
+              {current === 0 && <TimePicker format="HH:mm" minuteStep={15} />}
+              {current === 1 && (
+                <TextArea style={{ height: "100%", resize: "none" }} />
+              )}
+              {current === 2 && <h3>点击确定按钮完成预约</h3>}
             </div>
             <div className="steps-action">
               {current < steps.length - 1 && (
                 <Button type="primary" onClick={() => this.next()}>
-                  Next
-                </Button>
-              )}
-              {current === steps.length - 1 && (
-                <Button
-                  type="primary"
-                  onClick={() => message.success("Processing complete!")}
-                >
-                  Done
+                  下一步
                 </Button>
               )}
               {current > 0 && (
                 <Button style={{ marginLeft: 8 }} onClick={() => this.prev()}>
-                  Previous
+                  上一步
                 </Button>
               )}
             </div>
@@ -120,4 +121,4 @@ class ResourcePage extends Component {
   }
 }
 
-export default ResourcePage;
+export default ResourceRoomPage;
