@@ -349,10 +349,10 @@ class ManagePage extends Component {
                     >
                       <Skeleton title={false} loading={item.loading} active>
                         <Row gutter={16} style={{ width: "100%" }}>
-                          <Col key={0} span={5}>
+                          <Col key={0} span={2}>
                             {item.id}
                           </Col>
-                          <Col key={1} span={3}>
+                          <Col key={1} span={6}>
                             <Link to={`/articles/${item.alias}`}>
                               {item.title}
                             </Link>
@@ -463,10 +463,10 @@ class ManagePage extends Component {
                       >
                         <Skeleton title={false} loading={item.loading} active>
                           <Row gutter={16} style={{ width: "100%" }}>
-                            <Col key={0} span={5}>
+                            <Col key={0} span={2}>
                               {item.id}
                             </Col>
-                            <Col key={1} span={3}>
+                            <Col key={1} span={6}>
                               <Link to={`/articles/${item.alias}`}>
                                 {item.title}
                               </Link>
