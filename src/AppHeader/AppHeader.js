@@ -99,10 +99,10 @@ class AppHeader extends Component {
           </Menu.Item>
           <SubMenu title="资源">
             <Menu.Item key="1">
-              <Link to="/resources">活动室</Link>
+              <Link to="/resources/room">活动室</Link>
             </Menu.Item>
             <Menu.Item key="2">
-              <Link to="/resources">设备</Link>
+              <Link to="/resources/devices">设备</Link>
             </Menu.Item>
           </SubMenu>
         </Menu>
