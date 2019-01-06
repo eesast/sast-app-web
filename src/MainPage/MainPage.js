@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { List, BackTop, Spin, message } from "antd";
+import { List, BackTop, message } from "antd";
 import InfiniteScroll from "react-infinite-scroller";
 import axios from "axios";
 import "./MainPage.css";
@@ -67,7 +67,6 @@ class MainPage extends Component {
           <List
             itemLayout="vertical"
             split={false}
-            locale={{ emptyText: "-_-" }}
             loading={this.state.loading}
             dataSource={this.state.data}
             renderItem={item => (
@@ -82,13 +81,8 @@ class MainPage extends Component {
                 </Link>
               </List.Item>
             )}
-          >
-            <div className="Spin-container">
-              {this.state.loading && this.state.hasMore && <Spin />}
-            </div>
-          </List>
+          />
         </InfiniteScroll>
-
         <BackTop />
       </div>
     );
