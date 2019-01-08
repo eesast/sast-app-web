@@ -1,6 +1,6 @@
 {
   "name": "sast-app-web",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "private": true,
   "dependencies": {
     "antd": "^3.12.1",
@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "@craco/craco": "^3.2.3",
-    "@types/jest": "^23.3.11",
+    "@types/jest": "^23.3.12",
     "craco-antd": "^1.9.3",
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.7.1",
