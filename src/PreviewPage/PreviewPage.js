@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 import { List, BackTop, message } from "antd";
 import InfiniteScroll from "react-infinite-scroller";
 import axios from "axios";
-import "./MainPage.css";
+import "./PreviewPage.css";
 import PreviewCard from "../PreviewCard/PreviewCard";
 
-class MainPage extends Component {
+class PreviewPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -57,7 +57,7 @@ class MainPage extends Component {
 
   render() {
     return (
-      <div className="MainPage">
+      <div className="PreviewPage">
         <InfiniteScroll
           initialLoad={false}
           pageStart={0}
@@ -89,4 +89,4 @@ class MainPage extends Component {
   }
 }
 
-export default MainPage;
+export default PreviewPage;

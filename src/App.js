@@ -8,7 +8,7 @@ import zhCN from "antd/lib/locale-provider/zh_CN";
 import AuthRoute from "./AuthRoute/AuthRoute";
 import { AuthProvider } from "./AuthContext/AuthContext";
 import AppHeader from "./AppHeader/AppHeader";
-import MainPage from "./MainPage/MainPage";
+import PreviewPage from "./PreviewPage/PreviewPage";
 import ArticlePage from "./ArticlePage/ArticlePage";
 import EditPage from "./EditPage/EditPage";
 import LoginPage from "./LoginPage/LoginPage";
@@ -35,7 +35,7 @@ class App extends Component {
               <Layout>
                 <AppHeader />
                 <Content className="App-content">
-                  <Route exact path="/" component={MainPage} />
+                  <Route exact path="/" component={PreviewPage} />
                   <AuthRoute
                     exact
                     path="/manage"
