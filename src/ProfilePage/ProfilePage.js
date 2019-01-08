@@ -106,7 +106,7 @@ class ProfileForm extends React.Component {
     const userInfo = this.context.decodeToken();
     if (userInfo.id) {
       axios
-        .get(`/v1/users/${userInfo.id}`)
+        .get(`/v1/users/${userInfo.id}?detailInfo=true`)
         .then(response => {
           this.setState({
             userInfo: { ...this.state.userInfo, ...response.data }
