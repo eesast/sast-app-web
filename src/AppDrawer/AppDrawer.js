@@ -19,10 +19,16 @@ class AppDrawer extends Component {
       >
         <Menu mode="inline" defaultSelectedKeys={["0"]}>
           <Menu.Item key="0">
-            <Link to="/" onClick={this.props.onClose}>
-              文章
-            </Link>
+            <Link to="/">文章</Link>
           </Menu.Item>
+          <Menu.SubMenu title="资源">
+            <Menu.Item key="1">
+              <Link to="/resources/room">活动室</Link>
+            </Menu.Item>
+            <Menu.Item key="2">
+              <Link to="/resources/items">物品</Link>
+            </Menu.Item>
+          </Menu.SubMenu>
         </Menu>
       </Drawer>
     );

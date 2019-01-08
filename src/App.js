@@ -16,6 +16,7 @@ import RegisterPage from "./RegisterPage/RegisterPage";
 import ResourceRoomPage from "./ResourceRoomPage/ResourceRoomPage";
 import ProfilePage from "./ProfilePage/ProfilePage";
 import ManagePage from "./ManagePage/ManagePage";
+import ResourceItemPage from "./ResourceItemPage/ResourceItemPage";
 import baseURL from "./config/baseUrl";
 
 axios.defaults.baseURL = baseURL;
@@ -51,6 +52,11 @@ class App extends Component {
                     exact
                     path="/resources/room"
                     component={ResourceRoomPage}
+                  />
+                  <AuthRoute
+                    exact
+                    path="/resources/items"
+                    component={ResourceItemPage}
                   />
                   <Route exact path="/login" component={LoginPage} />
                   <Route exact path="/register" component={RegisterPage} />

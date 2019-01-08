@@ -102,7 +102,7 @@ class AppHeader extends Component {
               <Link to="/resources/room">活动室</Link>
             </Menu.Item>
             <Menu.Item key="2">
-              <Link to="/resources/devices">设备</Link>
+              <Link to="/resources/items">物品</Link>
             </Menu.Item>
           </SubMenu>
         </Menu>
