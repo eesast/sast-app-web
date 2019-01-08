@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Card } from "antd";
+import { Card, Icon } from "antd";
 import "./PreviewCard.css";
 import baseUrl from "../config/baseUrl";
 
@@ -36,6 +36,41 @@ class PreviewCard extends Component {
         loading={this.props.loading || this.state.imgLoading}
       >
         <Meta title={this.props.title} description={this.props.abstract} />
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between"
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              marginLeft: "-24px",
+              marginBottom: "-36px",
+              marginTop: "36px"
+            }}
+          >
+            <Icon type="eye" />
+            <div style={{ marginLeft: "6px" }}>{this.props.views || 0}</div>
+            <div style={{ marginLeft: "12px" }}>
+              {this.props.tags && this.props.tags.join(" / ")}
+            </div>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              marginRight: "-24px",
+              marginBottom: "-36px",
+              marginTop: "36px"
+            }}
+          >
+            <Icon type="like" />
+            <div style={{ marginLeft: "6px" }}>{this.props.likes || 0}</div>
+          </div>
+        </div>
       </Card>
     );
   }

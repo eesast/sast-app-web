@@ -77,6 +77,9 @@ class PreviewPage extends Component {
                     image={item.image}
                     title={item.title}
                     abstract={item.abstract}
+                    views={item.views}
+                    likes={item.likers.length}
+                    tags={item.tags}
                   />
                 </Link>
               </List.Item>

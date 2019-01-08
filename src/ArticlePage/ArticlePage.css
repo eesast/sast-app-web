@@ -13,6 +13,12 @@
   padding: 45px;
 }
 
+.like-button:hover,
+.like-button-clicked {
+  color: #8440bd;
+  cursor: pointer;
+}
+
 @media screen and (max-width: 480px) {
   .ArticlePage {
     margin-top: 64px;
