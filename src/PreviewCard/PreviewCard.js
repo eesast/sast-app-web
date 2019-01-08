@@ -8,7 +8,10 @@ const { Meta } = Card;
 class PreviewCard extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      imgLoading: true,
+      imgFailLoading: false
+    };
   }
 
   render() {
@@ -19,11 +22,18 @@ class PreviewCard extends Component {
         cover={
           <img
             className="Card-img"
+            hidden={this.state.imgFailLoading}
             alt={this.props.title}
             src={baseUrl + this.props.image}
+            onLoad={() => {
+              this.setState({ imgLoading: false });
+            }}
+            onError={() => {
+              this.setState({ imgLoading: false, imgFailLoading: true });
+            }}
           />
         }
-        loading={this.props.loading}
+        loading={this.props.loading || this.state.imgLoading}
       >
         <Meta title={this.props.title} description={this.props.abstract} />
       </Card>
