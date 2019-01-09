@@ -140,6 +140,12 @@ class ArticlePage extends Component {
   };
 
   handleLikeButtonClick = e => {
+    const tokenValid = this.context.isTokenValid();
+    if (!tokenValid) {
+      this.props.history.push("/login");
+      message.info("请先登录");
+    }
+
     const decoded = this.context.decodeToken();
     let likersNames = [...this.state.likersNames];
 
@@ -163,6 +169,12 @@ class ArticlePage extends Component {
   };
 
   handleReply = () => {
+    const tokenValid = this.context.isTokenValid();
+    if (!tokenValid) {
+      this.props.history.push("/login");
+      message.info("请先登录");
+    }
+
     this.setState({ replyFormVisible: !this.state.replyFormVisible }, () => {
       if (this.state.replyFormVisible)
         this.editFormRef.current.scrollIntoView({
@@ -273,7 +285,11 @@ class ArticlePage extends Component {
             handleCommentSubmitted={this.handleCommentSubmitted}
           />
           {this.state.comments.map(comment => (
-            <CommentCard key={comment.id} comment={comment} />
+            <CommentCard
+              key={comment.id}
+              comment={comment}
+              history={this.props.history}
+            />
           ))}
           <BackTop />
         </div>
