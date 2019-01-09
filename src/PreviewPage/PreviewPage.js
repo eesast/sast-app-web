@@ -17,6 +17,24 @@ class PreviewPage extends Component {
     };
   }
 
+  componentWillMount = () => {
+    const ua = navigator.userAgent.toLowerCase();
+    if (
+      /micromessenger/.test(ua) &&
+      sessionStorage.getItem("refresh") !== "1"
+    ) {
+      window.location.search = `?wx=${Date.now()}`;
+      sessionStorage.setItem("refresh", "1");
+    }
+  };
+
+  componentWillUnmount = () => {
+    const ua = navigator.userAgent.toLowerCase();
+    if (/micromessenger/.test(ua)) {
+      sessionStorage.removeItem("refresh");
+    }
+  };
+
   componentDidMount = () => {
     axios
       .get("/v1/articles?begin=0&end=4&noContent=true")

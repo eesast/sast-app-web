@@ -52,13 +52,19 @@ class ArticlePage extends Component {
 
   componentWillMount = () => {
     const ua = navigator.userAgent.toLowerCase();
+    if (
+      /micromessenger/.test(ua) &&
+      sessionStorage.getItem("refresh") !== "1"
+    ) {
+      window.location.search = `?wx=${Date.now()}`;
+      sessionStorage.setItem("refresh", "1");
+    }
+  };
+
+  componentWillUnmount = () => {
+    const ua = navigator.userAgent.toLowerCase();
     if (/micromessenger/.test(ua)) {
-      // TODO: clear when leaving the page
-      const reloadTime = sessionStorage.getItem("reload-time") || "0";
-      if (reloadTime !== "1") {
-        sessionStorage.setItem("reload-time", "1");
-        window.location.reload();
-      }
+      sessionStorage.removeItem("refresh");
     }
   };
 
