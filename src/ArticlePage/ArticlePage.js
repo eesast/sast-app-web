@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BackTop, Card, message, Icon, List, Popover } from "antd";
+import { BackTop, Card, message, Icon, List, Popover, Divider } from "antd";
 import axios from "axios";
 import hljs from "highlight.js";
 import DOMPurify from "dompurify";
@@ -9,6 +9,7 @@ import { AuthContext } from "../AuthContext/AuthContext";
 import "./ArticlePage.css";
 import "../github-markdown.css";
 import "highlight.js/styles/github.css";
+import CommentCard from "../CommentCard/CommentCard";
 
 Marked.setOptions({
   highlight: code => {
@@ -30,7 +31,8 @@ class ArticlePage extends Component {
       },
       liked: false,
       likersNames: [],
-      id: 0
+      id: 0,
+      comments: []
     };
   }
 
@@ -85,18 +87,38 @@ class ArticlePage extends Component {
                 .map(p =>
                   p.then(response => response.data).catch(error => null)
                 )
-            )
-              .then(res => {
-                const names = res.map(res => (res ? res.name : ""));
-                this.setState({
-                  likersNames: names
-                });
-              })
-              .catch();
+            ).then(res => {
+              const names = res.map(res => (res ? res.name : ""));
+              this.setState({
+                likersNames: names
+              });
+            });
           })
           .catch(error => message.error("作者加载失败"));
       })
       .catch(error => message.error("文章加载失败"));
+
+    axios
+      .get(`/v1/comments?replyTo=-1`)
+      .then(response => {
+        const comments = response.data;
+        this.setState({ comments });
+
+        Promise.all(
+          comments.map(comment => {
+            return axios
+              .get(`/v1/users/${comment.authorId}`)
+              .then(response => response.data.name);
+          })
+        ).then(names => {
+          let newComments = [...this.state.comments];
+          for (let index = 0; index < names.length; index++) {
+            newComments[index].author = names[index];
+          }
+          this.setState({ comments: newComments });
+        });
+      })
+      .catch(error => message.error("评论加载失败"));
   };
 
   handleLikeButtonClick = e => {
@@ -204,6 +226,10 @@ class ArticlePage extends Component {
               </div>
             </div>
           </Card>
+          <Divider />
+          {this.state.comments.map(comment => (
+            <CommentCard key={comment.id} comment={comment} />
+          ))}
           <BackTop />
         </div>
       </DocumentTitle>

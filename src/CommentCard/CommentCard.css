@@ -1,0 +1,15 @@
+.like-button:hover,
+.reply-button:hover,
+.like-button-clicked {
+  color: #8440bd;
+  cursor: pointer;
+}
+
+.reply-button:hover {
+  text-decoration: underline;
+}
+
+.ant-comment-content-author > a,
+.ant-comment-content-author > span {
+  font-size: 14px;
+}
