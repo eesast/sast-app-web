@@ -13,3 +13,7 @@
 .ant-comment-content-author > span {
   font-size: 14px;
 }
+
+.ant-comment-actions {
+  margin: 0;
+}

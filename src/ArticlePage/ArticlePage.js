@@ -1,5 +1,14 @@
 import React, { Component } from "react";
-import { BackTop, Card, message, Icon, List, Popover, Divider } from "antd";
+import {
+  BackTop,
+  Card,
+  message,
+  Icon,
+  List,
+  Popover,
+  Divider,
+  Button
+} from "antd";
 import axios from "axios";
 import hljs from "highlight.js";
 import DOMPurify from "dompurify";
@@ -10,6 +19,7 @@ import "./ArticlePage.css";
 import "../github-markdown.css";
 import "highlight.js/styles/github.css";
 import CommentCard from "../CommentCard/CommentCard";
+import CommentEditCard from "../CommentEditCard/CommentEditCard";
 
 Marked.setOptions({
   highlight: code => {
@@ -32,8 +42,10 @@ class ArticlePage extends Component {
       liked: false,
       likersNames: [],
       id: 0,
-      comments: []
+      comments: [],
+      replyFormVisible: false
     };
+    this.editFormRef = React.createRef();
   }
 
   static contextType = AuthContext;
@@ -144,6 +156,21 @@ class ArticlePage extends Component {
     }
   };
 
+  handleReply = () => {
+    this.setState({ replyFormVisible: !this.state.replyFormVisible }, () => {
+      if (this.state.replyFormVisible)
+        this.editFormRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+    });
+  };
+
+  handleCommentSubmitted = newComment => {
+    this.setState({ replyFormVisible: false });
+    this.setState({ comments: [...this.state.comments, newComment] });
+  };
+
   render() {
     return (
       <DocumentTitle
@@ -227,6 +254,18 @@ class ArticlePage extends Component {
             </div>
           </Card>
           <Divider />
+          <Button style={{ marginBottom: "12px" }} onClick={this.handleReply}>
+            评论文章
+          </Button>
+          <CommentEditCard
+            className={
+              this.state.replyFormVisible ? "edit-card-show" : "edit-card"
+            }
+            ref={this.editFormRef}
+            articleId={this.state.id}
+            replyTo={-1}
+            handleCommentSubmitted={this.handleCommentSubmitted}
+          />
           {this.state.comments.map(comment => (
             <CommentCard key={comment.id} comment={comment} />
           ))}

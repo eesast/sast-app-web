@@ -97,6 +97,9 @@ class CommentEditCard extends Component {
                 content,
                 replyTo: this.props.replyTo || -1
               });
+              this.setState({
+                content: ""
+              });
               resolve(true);
             })
             .catch(error => {
@@ -131,7 +134,8 @@ class CommentEditCard extends Component {
         <Menu
           style={{
             display: "flex",
-            justifyContent: "space-between"
+            justifyContent: "space-between",
+            border: "1px solid #e8e8e8"
           }}
           onClick={this.handleMenuClick}
           selectedKeys={[this.state.current]}

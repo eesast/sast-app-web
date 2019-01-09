@@ -1,11 +1,23 @@
 import React, { Component } from "react";
-import { Comment, Icon, Tooltip, Popover, List, message, Skeleton } from "antd";
+import { Comment, Icon, Tooltip, Popover, List, message, Card } from "antd";
 import moment from "moment";
-import "./CommentCard.css";
+import hljs from "highlight.js";
+import DOMPurify from "dompurify";
+import Marked from "marked";
 import axios from "axios";
+import "./CommentCard.css";
+import "../github-markdown.css";
+import "highlight.js/styles/github.css";
 import CommentEditCard from "../CommentEditCard/CommentEditCard";
 import { AuthContext } from "../AuthContext/AuthContext";
 
+Marked.setOptions({
+  highlight: code => {
+    return hljs.highlightAuto(code).value;
+  },
+  sanitize: true,
+  sanitizer: DOMPurify.sanitize
+});
 class CommentCard extends Component {
   constructor(props) {
     super(props);
@@ -14,7 +26,8 @@ class CommentCard extends Component {
       liked: false,
       comments: [],
       replyFormVisible: false,
-      loading: true
+      loading: true,
+      md: ""
     };
     this.editFormRef = React.createRef();
   }
@@ -22,6 +35,12 @@ class CommentCard extends Component {
   static contextType = AuthContext;
 
   componentDidMount = () => {
+    this.setState({
+      md: {
+        __html: Marked(this.props.comment.content)
+      }
+    });
+
     axios
       .get(`/v1/comments?replyTo=${this.props.comment.id}`)
       .then(response => {
@@ -61,11 +80,9 @@ class CommentCard extends Component {
   handleReply = () => {
     this.setState({ replyFormVisible: !this.state.replyFormVisible }, () => {
       if (this.state.replyFormVisible)
-        window.scrollTo({
-          top:
-            this.editFormRef.current.offsetTop +
-            this.editFormRef.current.offsetParent.offsetTop,
-          behavior: "smooth"
+        this.editFormRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
         });
     });
   };
@@ -157,11 +174,21 @@ class CommentCard extends Component {
     ];
 
     return (
-      <Skeleton active loading={this.state.loading}>
+      <Card
+        loading={this.state.loading}
+        bodyStyle={{ padding: "18px", marginBottom: 0 }}
+      >
         <Comment
           actions={actions}
           author={this.props.comment.author}
-          content={this.props.comment.content}
+          content={
+            <article
+              className="markdown-body"
+              style={{ padding: 0, margin: "6px" }}
+            >
+              <div dangerouslySetInnerHTML={this.state.md} />
+            </article>
+          }
           datetime={
             <Tooltip
               title={moment(this.props.comment.createdAt).format(
@@ -185,7 +212,7 @@ class CommentCard extends Component {
             handleCommentSubmitted={this.handleCommentSubmitted}
           />
         </Comment>
-      </Skeleton>
+      </Card>
     );
   }
 }
