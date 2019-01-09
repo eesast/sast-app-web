@@ -81,6 +81,28 @@ class ArticlePage extends Component {
 
             if (!data.visible) message.info("您正在预览未发布的文章");
 
+            axios
+              .get(`/v1/comments?replyTo=-1&articleId=${data.id}`)
+              .then(response => {
+                const comments = response.data;
+                this.setState({ comments });
+
+                Promise.all(
+                  comments.map(comment => {
+                    return axios
+                      .get(`/v1/users/${comment.authorId}`)
+                      .then(response => response.data.name);
+                  })
+                ).then(names => {
+                  let newComments = [...this.state.comments];
+                  for (let index = 0; index < names.length; index++) {
+                    newComments[index].author = names[index];
+                  }
+                  this.setState({ comments: newComments });
+                });
+              })
+              .catch(error => message.error("评论加载失败"));
+
             Promise.all(
               data.likers
                 .map(liker => axios.get(`/v1/users/${liker}`))
@@ -97,28 +119,6 @@ class ArticlePage extends Component {
           .catch(error => message.error("作者加载失败"));
       })
       .catch(error => message.error("文章加载失败"));
-
-    axios
-      .get(`/v1/comments?replyTo=-1`)
-      .then(response => {
-        const comments = response.data;
-        this.setState({ comments });
-
-        Promise.all(
-          comments.map(comment => {
-            return axios
-              .get(`/v1/users/${comment.authorId}`)
-              .then(response => response.data.name);
-          })
-        ).then(names => {
-          let newComments = [...this.state.comments];
-          for (let index = 0; index < names.length; index++) {
-            newComments[index].author = names[index];
-          }
-          this.setState({ comments: newComments });
-        });
-      })
-      .catch(error => message.error("评论加载失败"));
   };
 
   handleLikeButtonClick = e => {
