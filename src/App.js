@@ -40,7 +40,7 @@ class App extends Component {
                     exact
                     path="/manage"
                     component={ManagePage}
-                    authenticate={["root"]}
+                    authenticate={["root", "keeper"]}
                   />
                   <AuthRoute
                     exact

@@ -57,7 +57,8 @@ class ResourceItemPage extends Component {
     reserveTimeTo: moment(),
     reserveReason: "",
     reservations: [],
-    selectedReserveItemId: -1
+    selectedReserveItemId: -1,
+    decoded: {}
   };
 
   static contextType = AuthContext;
@@ -201,7 +202,7 @@ class ResourceItemPage extends Component {
   componentDidMount = () => {
     const decoded = this.context.decodeToken();
     if (decoded && (decoded.role === "root" || decoded.role === "keeper"))
-      this.setState({ newItemButtonVisible: true });
+      this.setState({ newItemButtonVisible: true, decoded });
 
     axios
       .get(`/v1/items`)
@@ -318,6 +319,7 @@ class ResourceItemPage extends Component {
                         onClick={e => this.handleItemReserve(e, item.id)}
                       />
                       <Button
+                        hidden={!this.state.newItemButtonVisible}
                         type="danger"
                         icon="delete"
                         style={{ marginLeft: "6px" }}

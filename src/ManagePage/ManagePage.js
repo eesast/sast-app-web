@@ -20,6 +20,7 @@ import InfiniteScroll from "react-infinite-scroller";
 import "./ManagePage.css";
 import axios from "axios";
 import moment from "moment";
+import { AuthContext } from "../AuthContext/AuthContext";
 
 const { Content, Sider } = Layout;
 const confirm = Modal.confirm;
@@ -64,9 +65,12 @@ class ManagePage extends Component {
       loading: false,
       hasMore: true,
       reservations: [],
-      allReservations: []
+      allReservations: [],
+      onlyShowForKeeper: false
     };
   }
+
+  static contextType = AuthContext;
 
   Tags = props => {
     return (
@@ -89,25 +93,31 @@ class ManagePage extends Component {
   };
 
   componentDidMount = () => {
-    axios.get(`/v1/users?begin=0&end=4&detailInfo=true`).then(response => {
-      this.setState({ users: response.data || [] });
-    });
+    const decoded = this.context.decodeToken();
+    if (decoded && decoded.role === "keeper")
+      this.setState({ onlyShowForKeeper: true });
 
-    axios
-      .get(`/v1/articles?begin=0&end=4&imvisible=true&noContent=true`)
-      .then(response => {
-        let articles = response.data || [];
-        for (let index = 0; index < articles.length; index++) {
-          const article = articles[index];
-          axios.get(`/v1/users/${article.authorId}`).then(response => {
-            const user = response.data;
-            if (user) article.author = user.name;
-            articles[index] = article;
-            this.setState({ articles });
-          });
-        }
-        this.setState({ articles });
+    if (decoded && decoded.role === "root") {
+      axios.get(`/v1/users?begin=0&end=4&detailInfo=true`).then(response => {
+        this.setState({ users: response.data || [] });
       });
+
+      axios
+        .get(`/v1/articles?begin=0&end=4&imvisible=true&noContent=true`)
+        .then(response => {
+          let articles = response.data || [];
+          for (let index = 0; index < articles.length; index++) {
+            const article = articles[index];
+            axios.get(`/v1/users/${article.authorId}`).then(response => {
+              const user = response.data;
+              if (user) article.author = user.name;
+              articles[index] = article;
+              this.setState({ articles });
+            });
+          }
+          this.setState({ articles });
+        });
+    }
 
     axios.get(`/v1/reservations?begin=0&end=4&roomOnly=all`).then(response => {
       let reservations = response.data || [];
