@@ -1,0 +1,14 @@
+{
+  "extends": [
+    "tslint:latest",
+    "tslint-react",
+    "tslint-eslint-rules",
+    "tslint-config-prettier",
+    "tslint-immutable"
+  ],
+  "rules": {
+    "member-access": [true, "no-public"],
+    "object-literal-sort-keys": false,
+    "no-submodule-imports": false
+  }
+}
