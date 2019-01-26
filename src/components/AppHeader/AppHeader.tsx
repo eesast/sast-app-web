@@ -3,7 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import AppDrawer from "../AppDrawer/AppDrawer";
-import { AuthContext } from "../AuthContext/AuthContext";
+import { AuthConsumer, AuthContext } from "../AuthContext/AuthContext";
 import "./AppHeader.css";
 
 const { Header } = Layout;
@@ -13,8 +13,6 @@ interface IAppHeaderState {
   headerStyle: "App-header-hidden" | "App-header";
   scrollPos: number;
   drawerVisible: boolean;
-  manageIconVisible: boolean;
-  editIconVisible: boolean;
 }
 
 export default class AppHeader extends React.Component<{}, IAppHeaderState> {
@@ -26,20 +24,13 @@ export default class AppHeader extends React.Component<{}, IAppHeaderState> {
     this.state = {
       headerStyle: "App-header",
       scrollPos: 0,
-      drawerVisible: false,
-      manageIconVisible: false,
-      editIconVisible: false
+      drawerVisible: false
     };
   }
 
   render() {
     const { logout } = this.context;
-    const {
-      headerStyle,
-      manageIconVisible,
-      editIconVisible,
-      drawerVisible
-    } = this.state;
+    const { headerStyle, drawerVisible } = this.state;
 
     const dropdownMenu = (
       <Menu>
@@ -53,46 +44,76 @@ export default class AppHeader extends React.Component<{}, IAppHeaderState> {
     );
 
     return (
-      <Header className={headerStyle}>
-        <Button
-          className="App-drawer-icon"
-          icon="bars"
-          ghost={true}
-          onClick={this.handleDrawerOpen}
-        />
-        <img className="App-logo" alt="logo" src={logo} />
-        <h1 className="App-name">SAST Weekly</h1>
-        <Menu
-          className="App-menu"
-          theme="dark"
-          mode="horizontal"
-          defaultSelectedKeys={["0"]}
-        >
-          <Menu.Item key="0">
-            <Link to="/">文章</Link>
-          </Menu.Item>
-          <SubMenu title="资源">
-            <Menu.Item key="1">
-              <Link to="/resources/room">活动室</Link>
-            </Menu.Item>
-            <Menu.Item key="2">
-              <Link to="/resources/items">物品</Link>
-            </Menu.Item>
-          </SubMenu>
-        </Menu>
-        <div className="App-actions">
-          <Link to="/manage" hidden={!manageIconVisible}>
-            <Button ghost={true} icon="safety" />
-          </Link>
-          <Link to="/edit" hidden={!editIconVisible}>
-            <Button ghost={true} icon="form" />
-          </Link>
-          <Dropdown overlay={dropdownMenu}>
-            <Button ghost={true} icon="user" />
-          </Dropdown>
-        </div>
-        <AppDrawer visible={drawerVisible} onClose={this.handleDrawerClose} />
-      </Header>
+      <AuthConsumer>
+        {({ auth, userInfo }) => {
+          return (
+            <Header className={headerStyle}>
+              <Button
+                className="App-drawer-icon"
+                icon="bars"
+                ghost={true}
+                onClick={this.handleDrawerOpen}
+              />
+              <img className="App-logo" alt="logo" src={logo} />
+              <h1 className="App-name">SAST Weekly</h1>
+              <Menu
+                className="App-menu"
+                theme="dark"
+                mode="horizontal"
+                defaultSelectedKeys={["0"]}
+              >
+                <Menu.Item key="0">
+                  <Link to="/">文章</Link>
+                </Menu.Item>
+                <SubMenu title="资源">
+                  <Menu.Item key="1">
+                    <Link to="/resources/room">活动室</Link>
+                  </Menu.Item>
+                  <Menu.Item key="2">
+                    <Link to="/resources/items">物品</Link>
+                  </Menu.Item>
+                </SubMenu>
+              </Menu>
+              <div className="App-actions">
+                <Link
+                  to="/manage"
+                  hidden={
+                    userInfo.role !== "root" &&
+                    userInfo.role !== "keeper" &&
+                    userInfo.role !== "editor"
+                  }
+                >
+                  <Button ghost={true} icon="safety" />
+                </Link>
+                <Link
+                  to="/edit"
+                  hidden={
+                    userInfo.role !== "root" &&
+                    userInfo.role !== "keeper" &&
+                    userInfo.role !== "editor" &&
+                    userInfo.role !== "writer"
+                  }
+                >
+                  <Button ghost={true} icon="form" />
+                </Link>
+                {auth ? (
+                  <Dropdown overlay={dropdownMenu}>
+                    <Button ghost={true} icon="user" />
+                  </Dropdown>
+                ) : (
+                  <Link to="/login">
+                    <Button ghost={true} icon="user" />
+                  </Link>
+                )}
+              </div>
+              <AppDrawer
+                visible={drawerVisible}
+                onClose={this.handleDrawerClose}
+              />
+            </Header>
+          );
+        }}
+      </AuthConsumer>
     );
   }
 
@@ -124,14 +145,6 @@ export default class AppHeader extends React.Component<{}, IAppHeaderState> {
 
   componentDidMount = () => {
     window.addEventListener("scroll", this.handleScroll);
-
-    const userInfo = this.context.checkToken();
-    if (userInfo && userInfo.role === "writer") {
-      this.setState({ editIconVisible: true });
-    }
-    if (userInfo && userInfo.role === "root") {
-      this.setState({ editIconVisible: true, manageIconVisible: true });
-    }
   };
 
   componentWillUnmount = () => {
