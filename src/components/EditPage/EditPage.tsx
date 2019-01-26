@@ -56,7 +56,6 @@ interface IEditPageState {
 }
 
 class EditPage extends Component<RouteComponentProps, IEditPageState> {
-  static contextType = AuthContext;
   context!: React.ContextType<typeof AuthContext>;
 
   textareaRef: React.RefObject<TextArea>;
@@ -428,4 +427,9 @@ class EditPage extends Component<RouteComponentProps, IEditPageState> {
   };
 }
 
+/**
+ * `hoist-non-react-statics` in `react-router` is old
+ * @see https://stackoverflow.com/questions/53240058/use-hoist-non-react-statics-with-withrouter
+ */
 export default withRouter(EditPage);
+EditPage.contextType = AuthContext;

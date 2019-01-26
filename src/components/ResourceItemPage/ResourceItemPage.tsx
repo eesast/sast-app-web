@@ -67,7 +67,6 @@ class ResourceItemPage extends React.Component<
   RouteComponentProps,
   IResourceItemPageState
 > {
-  static contextType = AuthContext;
   context!: React.ContextType<typeof AuthContext>;
 
   constructor(props: RouteComponentProps) {
@@ -467,4 +466,9 @@ class ResourceItemPage extends React.Component<
   };
 }
 
+/**
+ * `hoist-non-react-statics` in `react-router` is old
+ * @see https://stackoverflow.com/questions/53240058/use-hoist-non-react-statics-with-withrouter
+ */
 export default withRouter(ResourceItemPage);
+ResourceItemPage.contextType = AuthContext;
