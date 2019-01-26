@@ -113,52 +113,50 @@ class EditPage extends Component<RouteComponentProps, IEditPageState> {
       );
     };
 
-    const Tags = () => {
-      return (
-        <div style={{ marginTop: "12px" }}>
-          {tags.map(tag => {
-            const isLongTag = tag.length > 20;
-            const tagElem = (
-              <Tag
-                key={tag}
-                closable={true}
-                // tslint:disable-next-line: jsx-no-lambda
-                afterClose={() => this.handleTagRemove(tag)}
-              >
-                {isLongTag ? `${tag.slice(0, 20)}...` : tag}
-              </Tag>
-            );
-            return isLongTag ? (
-              <Tooltip title={tag} key={tag}>
-                {tagElem}
-              </Tooltip>
-            ) : (
-              tagElem
-            );
-          })}
-          {tagInputVisible && (
-            <Input
-              name="tagInputValue"
-              ref={this.tagInputRef}
-              type="text"
-              style={{ width: 78 }}
-              value={tagInputValue}
-              onChange={this.handleInputChange}
-              onBlur={this.handleTagInputConfirm}
-              onPressEnter={this.handleTagInputConfirm}
-            />
-          )}
-          {!tagInputVisible && (
+    const Tags = (
+      <div style={{ marginTop: "12px" }}>
+        {tags.map(tag => {
+          const isLongTag = tag.length > 20;
+          const tagElem = (
             <Tag
-              onClick={this.handleTagInputShow}
-              style={{ background: "#fff", borderStyle: "dashed" }}
+              key={tag}
+              closable={true}
+              // tslint:disable-next-line: jsx-no-lambda
+              afterClose={() => this.handleTagRemove(tag)}
             >
-              <Icon type="plus" /> 新标签
+              {isLongTag ? `${tag.slice(0, 20)}...` : tag}
             </Tag>
-          )}
-        </div>
-      );
-    };
+          );
+          return isLongTag ? (
+            <Tooltip title={tag} key={tag}>
+              {tagElem}
+            </Tooltip>
+          ) : (
+            tagElem
+          );
+        })}
+        {tagInputVisible && (
+          <Input
+            name="tagInputValue"
+            ref={this.tagInputRef}
+            type="text"
+            style={{ width: 78 }}
+            value={tagInputValue}
+            onChange={this.handleInputChange}
+            onBlur={this.handleTagInputConfirm}
+            onPressEnter={this.handleTagInputConfirm}
+          />
+        )}
+        {!tagInputVisible && (
+          <Tag
+            onClick={this.handleTagInputShow}
+            style={{ background: "#fff", borderStyle: "dashed" }}
+          >
+            <Icon type="plus" /> 新标签
+          </Tag>
+        )}
+      </div>
+    );
 
     return (
       <DocumentTitle
@@ -210,7 +208,7 @@ class EditPage extends Component<RouteComponentProps, IEditPageState> {
                 value={abstract}
                 onChange={this.handleInputChange}
               />
-              <Tags />
+              {Tags}
               <div style={{ display: "inline-block" }}>
                 <MultipleUpload
                   uploadPrompt="上传题图"
