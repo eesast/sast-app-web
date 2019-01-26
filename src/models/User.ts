@@ -13,4 +13,5 @@ export default interface IUserModel {
   createdBy?: number;
   updatedAt?: Date;
   updatedBy?: number;
+  exp?: number;
 }

@@ -1,7 +1,7 @@
 export default interface ICommentModel {
   id: number;
   authorId: number;
-  author: string;
+  author?: string;
   articleId: number;
   content: string;
   replyTo: number;
