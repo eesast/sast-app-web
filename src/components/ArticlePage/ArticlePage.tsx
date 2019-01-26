@@ -223,7 +223,7 @@ export default class ArticlePage extends React.Component<
 
       const authorResponse = await axios.get(`/v1/users/${article.authorId}`);
       const author = authorResponse.data;
-      const userInfo = this.context.checkToken();
+      const userInfo = this.context.userInfo;
 
       this.setState({
         id: article.id,
@@ -286,11 +286,12 @@ export default class ArticlePage extends React.Component<
   };
 
   handleLikeButtonClick = async () => {
-    const userInfo = this.context.checkToken();
-    if (!userInfo) {
-      this.props.history.push("/login");
+    this.context.checkTokenStatus();
+    if (!this.context.auth) {
       message.info("请先登录");
+      return;
     }
+    const userInfo = this.context.userInfo;
 
     const likersNames = [...this.state.likersNames];
 
@@ -321,10 +322,10 @@ export default class ArticlePage extends React.Component<
   };
 
   handleReply = () => {
-    const userInfo = this.context.checkToken();
-    if (!userInfo) {
-      this.props.history.push("/login");
+    this.context.checkTokenStatus();
+    if (!this.context.auth) {
       message.info("请先登录");
+      return;
     }
 
     this.setState({ replyFormVisible: !this.state.replyFormVisible }, () => {

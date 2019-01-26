@@ -14,19 +14,19 @@ const AuthRoute: (props: IAuthRouteProps) => any = ({
   ...rest
 }) => (
   <AuthConsumer>
-    {({ checkToken }) => (
+    {({ auth, userInfo }) => (
       <Route
         // tslint:disable-next-line: jsx-no-lambda
         render={props => {
-          const userInfo = checkToken();
-          if (userInfo) {
-            if (!authenticate) {
-              return <Component {...props} />;
-            } else if (authenticate.includes(userInfo.role)) {
-              return <Component {...props} />;
-            } else {
-              return <Redirect push={true} to="/login" />;
-            }
+          if (!auth) {
+            return <Redirect push={true} to="/login" />;
+          }
+
+          if (
+            !authenticate ||
+            (authenticate && authenticate.includes(userInfo.role))
+          ) {
+            return <Component {...props} />;
           } else {
             return <Redirect push={true} to="/login" />;
           }

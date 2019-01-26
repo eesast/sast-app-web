@@ -382,11 +382,12 @@ class EditPage extends Component<RouteComponentProps, IEditPageState> {
       message.error("请上传题图");
       return;
     }
-    const userInfo = this.context.checkToken();
-    if (!userInfo) {
-      this.props.history.push("/login");
+    this.context.checkTokenStatus();
+    if (!this.context.auth) {
       message.info("请先登录");
+      return;
     }
+    const userInfo = this.context.userInfo;
     const authorId = userInfo!.id;
 
     confirm({

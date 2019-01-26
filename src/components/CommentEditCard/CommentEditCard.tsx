@@ -152,13 +152,12 @@ class CommentEditCard extends Component<
       return;
     }
 
-    const userInfo = this.context.checkToken()!;
-    if (!userInfo) {
-      if (this.props.history) {
-        this.props.history.push("/login");
-      }
+    this.context.checkTokenStatus();
+    if (!this.context.auth) {
       message.info("请先登录");
+      return;
     }
+    const userInfo = this.context.userInfo;
 
     const authorId = userInfo.id;
     if (!authorId) {

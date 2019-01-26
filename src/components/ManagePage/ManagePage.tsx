@@ -383,7 +383,7 @@ export default class ManagePage extends React.Component<{}, IManagePageState> {
   );
 
   componentDidMount = async () => {
-    const userInfo = this.context.checkToken();
+    const userInfo = this.context.userInfo;
 
     if (userInfo && userInfo.role === "keeper") {
       this.setState({ onlyShowForKeeper: true });

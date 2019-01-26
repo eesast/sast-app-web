@@ -212,11 +212,12 @@ class ProfileForm extends React.Component<
     e.preventDefault();
     this.props.form.validateFieldsAndScroll(async (err, values) => {
       if (!err) {
-        const userInfo = this.context.checkToken()!;
-        if (!userInfo) {
-          this.props.history.push("/login");
+        this.context.checkTokenStatus();
+        if (!this.context.auth) {
           message.info("请先登录");
+          return;
         }
+        const userInfo = this.context.userInfo;
 
         try {
           await axios.put(`/v1/users/${userInfo.id}`, {
@@ -235,7 +236,7 @@ class ProfileForm extends React.Component<
   };
 
   componentDidMount = async () => {
-    const userInfo = this.context.checkToken();
+    const userInfo = this.context.userInfo;
     if (userInfo && userInfo.id) {
       try {
         const response = await axios.get(

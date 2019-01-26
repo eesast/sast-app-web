@@ -198,7 +198,7 @@ export default class CommentCard extends React.Component<
           return data.name;
         })
       );
-      const userInfo = this.context.checkToken();
+      const userInfo = this.context.userInfo;
       this.setState({
         likersNames,
         liked: comment.likers.includes(userInfo!.id)
@@ -209,12 +209,10 @@ export default class CommentCard extends React.Component<
   };
 
   handleReply = () => {
-    const userInfo = this.context.checkToken();
-    if (!userInfo) {
-      if (this.props.history) {
-        this.props.history.push("/login");
-      }
+    this.context.checkTokenStatus();
+    if (!this.context.auth) {
       message.info("请先登录");
+      return;
     }
 
     this.setState({ replyFormVisible: !this.state.replyFormVisible }, () => {
@@ -233,13 +231,12 @@ export default class CommentCard extends React.Component<
   };
 
   handleLikeButtonClick = async () => {
-    const userInfo = this.context.checkToken();
-    if (!userInfo) {
-      if (this.props.history) {
-        this.props.history.push("/login");
-      }
+    this.context.checkTokenStatus();
+    if (!this.context.auth) {
       message.info("请先登录");
+      return;
     }
+    const userInfo = this.context.userInfo;
 
     const likersNames = [...this.state.likersNames];
     const comment = this.props.comment;

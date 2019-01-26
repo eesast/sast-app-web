@@ -2,35 +2,23 @@ import { message } from "antd";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
 import React from "react";
-import { RouteComponentProps, withRouter } from "react-router-dom";
-
-interface IUserInfo {
-  id: number;
-  username: string;
-  name: string;
-  email: string;
-  group: string;
-  role: string;
-  exp: number;
-}
+import IUserModel from "../../models/User";
 
 export interface IAuthProviderState {
+  auth: boolean;
   token: string;
-  userInfo: IUserInfo;
+  userInfo: IUserModel;
   login: (username: string, password: string) => Promise<boolean>;
   logout: () => void;
-  checkToken: () => IUserInfo | undefined;
+  checkTokenStatus: () => void;
 }
 
-class AuthProvider extends React.Component<
-  RouteComponentProps,
-  IAuthProviderState
-> {
+class AuthProvider extends React.Component<{}, IAuthProviderState> {
   login: (username: string, password: string) => Promise<boolean>;
   logout: () => void;
-  checkToken: () => IUserInfo | undefined;
+  checkTokenStatus: () => void;
 
-  constructor(props: RouteComponentProps) {
+  constructor(props: {}) {
     super(props);
 
     this.login = async (username: string, password: string) => {
@@ -41,15 +29,23 @@ class AuthProvider extends React.Component<
         });
 
         const { token } = response.data;
-        const userInfo = this.checkToken();
-        if (userInfo) {
-          this.setState({ userInfo });
-          axios.defaults.headers.common.Authorization = "Bearer " + token;
-          return true;
-        } else {
-          return false;
-        }
+        const userInfo = jwtDecode(token) as IUserModel;
+        this.setState({
+          auth: true,
+          token,
+          userInfo
+        });
+        axios.defaults.headers.common.Authorization = "Bearer " + token;
+
+        message.success("登录成功");
+        return true;
       } catch (error) {
+        this.setState({
+          auth: false,
+          token: "",
+          userInfo: {} as any
+        });
+
         if (error.response) {
           const statusCode = error.response.status;
           if (statusCode === 401 || statusCode === 404) {
@@ -65,39 +61,39 @@ class AuthProvider extends React.Component<
     };
 
     this.logout = () => {
-      this.props.history.push("/");
+      this.setState({
+        auth: false,
+        token: "",
+        userInfo: {} as any
+      });
     };
 
-    this.checkToken = () => {
+    this.checkTokenStatus = () => {
       try {
-        const decoded = (jwtDecode(
-          this.state.token
-        ) as IAuthProviderState["userInfo"])!;
-
-        if (decoded.exp < Date.now() / 1000) {
-          this.props.history.push("/login");
+        const decoded = jwtDecode(this.state.token) as IUserModel;
+        if (decoded.exp! < Date.now() / 1000) {
+          this.setState({
+            auth: false,
+            token: "",
+            userInfo: {} as any
+          });
         }
-
-        return decoded;
       } catch {
-        this.props.history.push("/login");
+        this.setState({
+          auth: false,
+          token: "",
+          userInfo: {} as any
+        });
       }
     };
 
     this.state = {
+      auth: false,
       token: "",
-      userInfo: {
-        id: 0,
-        username: "",
-        name: "",
-        email: "",
-        group: "",
-        role: "",
-        exp: 0
-      },
+      userInfo: {} as any,
       login: this.login,
       logout: this.logout,
-      checkToken: this.checkToken
+      checkTokenStatus: this.checkTokenStatus
     };
   }
 
@@ -110,36 +106,7 @@ class AuthProvider extends React.Component<
   }
 }
 
-const AuthContext = React.createContext<IAuthProviderState>({
-  token: "",
-  userInfo: {
-    id: 0,
-    username: "",
-    name: "",
-    email: "",
-    group: "",
-    role: "",
-    exp: 0
-  },
-  // tslint:disable-next-line: no-empty
-  login: async (username, password) => {
-    return false;
-  },
-  // tslint:disable-next-line: no-empty
-  logout: () => {},
-  checkToken: () => {
-    return {
-      id: 0,
-      username: "",
-      name: "",
-      email: "",
-      group: "",
-      role: "",
-      exp: 0
-    };
-  }
-});
+const AuthContext = React.createContext<IAuthProviderState>({} as any);
 const AuthConsumer = AuthContext.Consumer;
-const withRouterAuthProvider = withRouter(AuthProvider);
 
-export { AuthContext, withRouterAuthProvider as AuthProvider, AuthConsumer };
+export { AuthContext, AuthProvider, AuthConsumer };
