@@ -444,16 +444,17 @@ export default class ManagePage extends React.Component<{}, IManagePageState> {
       group: value[0],
       role: value[1]
     };
+    const users = this.state.selectedMenu === "0" ? "users" : "allUsers";
 
     try {
       await axios.put(`/v1/users/${userId}`, {
         group: newAuth.group,
         role: newAuth.role
       });
-      const newUsers = [...this.state.users];
+      const newUsers = [...this.state[users]];
       const index = newUsers.findIndex(v => v.id === userId);
       newUsers[index] = { ...newUsers[index], ...newAuth };
-      this.setState({ users: newUsers });
+      this.setState({ [users]: newUsers } as any);
       message.success("用户权限更新成功");
     } catch {
       message.error("用户权限更新失败");
@@ -466,10 +467,12 @@ export default class ManagePage extends React.Component<{}, IManagePageState> {
       content: "此操作不可恢复！",
       onOk: async () => {
         try {
+          const users = this.state.selectedMenu === "0" ? "users" : "allUsers";
+
           await axios.delete(`/v1/users/${userId}`);
-          let newUsers = [...this.state.users];
+          let newUsers = [...this.state[users]];
           newUsers = newUsers.filter(value => value.id !== userId);
-          this.setState({ users: newUsers });
+          this.setState({ [users]: newUsers } as any);
           message.success("删除用户成功");
         } catch {
           message.error("删除用户失败");
@@ -484,12 +487,17 @@ export default class ManagePage extends React.Component<{}, IManagePageState> {
       content: "此操作不可恢复！",
       onOk: async () => {
         try {
+          const reservations =
+            this.state.selectedMenu === "0"
+              ? "reservations"
+              : "allReservations";
+
           await axios.delete(`/v1/reservations/${reservationId}`);
-          let newReservations = [...this.state.reservations];
+          let newReservations = [...this.state[reservations]];
           newReservations = newReservations.filter(
             value => value.id !== reservationId
           );
-          this.setState({ reservations: newReservations });
+          this.setState({ [reservations]: newReservations } as any);
           message.success("删除预约成功");
         } catch {
           message.error("删除预约失败");
@@ -504,10 +512,13 @@ export default class ManagePage extends React.Component<{}, IManagePageState> {
       content: "此操作不可恢复！",
       onOk: async () => {
         try {
+          const articles =
+            this.state.selectedMenu === "0" ? "articles" : "allArticles";
+
           await axios.delete(`/v1/articles/${articleId}`);
-          let newArticles = [...this.state.articles];
+          let newArticles = [...this.state[articles]];
           newArticles = newArticles.filter(value => value.id !== articleId);
-          this.setState({ articles: newArticles });
+          this.setState({ [articles]: newArticles } as any);
           message.success("删除文章成功");
         } catch {
           message.error("删除文章失败");
@@ -518,13 +529,16 @@ export default class ManagePage extends React.Component<{}, IManagePageState> {
 
   handleVisibleChange = async (articleId: number, checked: boolean) => {
     try {
+      const articles =
+        this.state.selectedMenu === "0" ? "articles" : "allArticles";
+
       await axios.put(`/v1/articles/${articleId}`, {
         visible: checked
       });
-      const newArticles = [...this.state.articles];
+      const newArticles = [...this.state[articles]];
       const index = newArticles.findIndex(value => value.id === articleId);
       newArticles[index] = { ...newArticles[index], visible: checked };
-      this.setState({ articles: newArticles });
+      this.setState({ [articles]: newArticles } as any);
       message.success("文章发布状态更新成功");
     } catch {
       message.error("文章发布状态更新失败");
@@ -533,10 +547,13 @@ export default class ManagePage extends React.Component<{}, IManagePageState> {
 
   handleApprovedChange = async (reservationId: number, checked: boolean) => {
     try {
+      const reservations =
+        this.state.selectedMenu === "0" ? "reservations" : "allReservations";
+
       await axios.put(`/v1/reservations/${reservationId}`, {
         approved: checked
       });
-      const newReservations = [...this.state.reservations];
+      const newReservations = [...this.state[reservations]];
       const index = newReservations.findIndex(
         value => value.id === reservationId
       );
@@ -544,7 +561,7 @@ export default class ManagePage extends React.Component<{}, IManagePageState> {
         ...newReservations[index],
         approved: checked
       };
-      this.setState({ reservations: newReservations });
+      this.setState({ [reservations]: newReservations } as any);
       message.success("预约状态更新成功");
     } catch {
       message.error("预约状态更新失败");
