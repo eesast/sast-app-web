@@ -20,8 +20,6 @@ import ResourceRoomPage from "./components/ResourceRoomPage/ResourceRoomPage";
 import baseURL from "./config/baseUrl";
 
 axios.defaults.baseURL = baseURL;
-axios.defaults.headers.common.Authorization =
-  "Bearer " + localStorage.getItem("token");
 
 const { Content, Footer } = Layout;
 
@@ -31,14 +29,18 @@ class App extends Component {
       <LocaleProvider locale={zhCN}>
         <DocumentTitle title="SAST Weekly">
           <Router>
-            <Layout>
-              <AppHeader />
-              <Content className="App-content">
-                <Route exact={true} path="/" component={PreviewPage} />
-                <Route exact={true} path="/login" component={LoginPage} />
-                <Route exact={true} path="/register" component={RegisterPage} />
-                <Route path="/articles/:alias" component={ArticlePage} />
-                <AuthProvider>
+            <AuthProvider>
+              <Layout>
+                <AppHeader />
+                <Content className="App-content">
+                  <Route exact={true} path="/" component={PreviewPage} />
+                  <Route
+                    exact={true}
+                    path="/register"
+                    component={RegisterPage}
+                  />
+                  <Route path="/articles/:alias" component={ArticlePage} />
+                  <Route exact={true} path="/login" component={LoginPage} />
                   <AuthRoute
                     exact={true}
                     path="/manage"
@@ -66,12 +68,12 @@ class App extends Component {
                     path="/profile"
                     component={ProfilePage}
                   />
-                </AuthProvider>
-              </Content>
-              <Footer style={{ height: "64px" }} className="App-footer">
-                © 2018 EESAST
-              </Footer>
-            </Layout>
+                </Content>
+                <Footer style={{ height: "64px" }} className="App-footer">
+                  © 2018 EESAST
+                </Footer>
+              </Layout>
+            </AuthProvider>
           </Router>
         </DocumentTitle>
       </LocaleProvider>
