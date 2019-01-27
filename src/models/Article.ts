@@ -11,8 +11,8 @@ export default interface IArticleModel {
   likers: number[];
   tags: string[];
   visible: boolean;
-  createdAt?: Date;
+  createdAt?: string;
   createdBy?: number;
-  updatedAt?: Date;
+  updatedAt?: string;
   updatedBy?: number;
 }

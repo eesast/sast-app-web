@@ -6,8 +6,8 @@ export default interface ICommentModel {
   content: string;
   replyTo: number;
   likers: number[];
-  createdAt?: Date;
+  createdAt?: string;
   createdBy?: number;
-  updatedAt?: Date;
+  updatedAt?: string;
   updatedBy?: number;
 }

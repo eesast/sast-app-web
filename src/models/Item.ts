@@ -4,8 +4,8 @@ export default interface IItemModel {
   description?: string;
   total: number;
   left: number;
-  createdAt?: Date;
+  createdAt?: string;
   createdBy?: number;
-  updatedAt?: Date;
+  updatedAt?: string;
   updatedBy?: number;
 }

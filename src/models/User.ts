@@ -9,9 +9,9 @@ export default interface IUserModel {
   phone?: number;
   department?: string;
   class?: string;
-  createdAt?: Date;
+  createdAt?: string;
   createdBy?: number;
-  updatedAt?: Date;
+  updatedAt?: string;
   updatedBy?: number;
   exp?: number;
 }

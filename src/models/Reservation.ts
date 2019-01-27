@@ -4,12 +4,12 @@ export default interface IReservationModel {
   itemName?: string;
   userId: number;
   userName?: string;
-  from: Date;
-  to: Date;
+  from: string;
+  to: string;
   reason?: string;
   approved: boolean;
-  createdAt?: Date;
+  createdAt?: string;
   createdBy?: number;
-  updatedAt?: Date;
+  updatedAt?: string;
   updatedBy?: number;
 }
