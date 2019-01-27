@@ -25,6 +25,8 @@ class LoginForm extends React.Component<
             <Input
               prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
               placeholder="用户名"
+              autoCapitalize="off"
+              autoCorrect="off"
               autoComplete="on"
             />
           )}
