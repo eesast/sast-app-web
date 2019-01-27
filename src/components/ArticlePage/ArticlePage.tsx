@@ -186,6 +186,7 @@ export default class ArticlePage extends React.Component<
           </Button>
           <CommentEditCard
             className={replyFormVisible ? "edit-card-show" : "edit-card"}
+            history={this.props.history}
             ref={this.editFormRef}
             articleId={id}
             replyTo={-1}
@@ -301,6 +302,7 @@ export default class ArticlePage extends React.Component<
     this.context.checkTokenStatus();
     if (!this.context.auth) {
       message.info("请先登录");
+      this.props.history.push("/login");
       return;
     }
     const userInfo = this.context.userInfo;
@@ -337,6 +339,7 @@ export default class ArticlePage extends React.Component<
     this.context.checkTokenStatus();
     if (!this.context.auth) {
       message.info("请先登录");
+      this.props.history.push("/login");
       return;
     }
 

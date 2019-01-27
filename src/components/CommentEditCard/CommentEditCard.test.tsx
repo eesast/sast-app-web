@@ -3,5 +3,5 @@ import React from "react";
 import CommentEditCard from "./CommentEditCard";
 
 it("renders without crashing", () => {
-  shallow(<CommentEditCard articleId={1} replyTo={-1} />);
+  shallow(<CommentEditCard articleId={1} replyTo={-1} history={{} as any} />);
 });

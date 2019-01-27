@@ -24,7 +24,7 @@ Marked.setOptions({
 
 export interface ICommentCardProps {
   comment: ICommentModel;
-  history?: RouteComponentProps["history"];
+  history: RouteComponentProps["history"];
 }
 
 interface ICommentCardState {
@@ -153,6 +153,7 @@ export default class CommentCard extends React.Component<
           ))}
           <CommentEditCard
             className={replyFormVisible ? "edit-card-show" : "edit-card"}
+            history={this.props.history}
             ref={this.editFormRef}
             articleId={comment.articleId}
             replyTo={comment.id}
@@ -212,6 +213,7 @@ export default class CommentCard extends React.Component<
     this.context.checkTokenStatus();
     if (!this.context.auth) {
       message.info("请先登录");
+      this.props.history.push("/login");
       return;
     }
 
@@ -234,6 +236,7 @@ export default class CommentCard extends React.Component<
     this.context.checkTokenStatus();
     if (!this.context.auth) {
       message.info("请先登录");
+      this.props.history.push("/login");
       return;
     }
     const userInfo = this.context.userInfo;

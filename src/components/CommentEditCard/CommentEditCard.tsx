@@ -27,7 +27,7 @@ const TextArea = Input.TextArea;
 export interface ICommentEditCardProps {
   innerRef?: React.Ref<{}>;
   className?: string;
-  history?: RouteComponentProps["history"];
+  history: RouteComponentProps["history"];
   articleId: number;
   replyTo: number;
   handleCommentSubmitted?: (newComment: ICommentModel) => void;
@@ -155,17 +155,12 @@ class CommentEditCard extends Component<
     this.context.checkTokenStatus();
     if (!this.context.auth) {
       message.info("请先登录");
+      this.props.history.push("/login");
       return;
     }
     const userInfo = this.context.userInfo;
 
     const authorId = userInfo.id;
-    if (!authorId) {
-      if (this.props.history) {
-        this.props.history.push("/login");
-      }
-      message.info("请先登录");
-    }
 
     confirm({
       title: "发布评论",

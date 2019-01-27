@@ -14,6 +14,7 @@ it("renders without crashing", () => {
         content: "test",
         replyTo: -1
       }}
+      history={{} as any}
     />
   );
 });
