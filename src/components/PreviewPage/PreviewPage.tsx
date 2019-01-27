@@ -53,6 +53,7 @@ export default class PreviewPage extends Component<{}, IPreviewPageState> {
                     views={item.views}
                     likes={item.likers.length}
                     tags={item.tags}
+                    createdAt={item.createdAt}
                   />
                 </Link>
               </List.Item>

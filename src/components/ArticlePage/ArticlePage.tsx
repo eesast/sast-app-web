@@ -13,6 +13,7 @@ import DOMPurify from "dompurify";
 import hljs from "highlight.js";
 import "highlight.js/styles/github.css";
 import Marked from "marked";
+import moment from "moment";
 import React from "react";
 import DocumentTitle from "react-document-title";
 import { RouteComponentProps } from "react-router-dom";
@@ -49,6 +50,7 @@ interface IArticlePageState {
   replyFormVisible: boolean;
   views: number;
   tags: string[];
+  updatedAt?: string;
 }
 
 export default class ArticlePage extends React.Component<
@@ -75,7 +77,8 @@ export default class ArticlePage extends React.Component<
       comments: [],
       replyFormVisible: false,
       views: 0,
-      tags: []
+      tags: [],
+      updatedAt: ""
     };
     this.editFormRef = React.createRef();
   }
@@ -91,7 +94,8 @@ export default class ArticlePage extends React.Component<
       liked,
       likersNames,
       replyFormVisible,
-      id
+      id,
+      updatedAt
     } = this.state;
 
     return (
@@ -113,11 +117,16 @@ export default class ArticlePage extends React.Component<
               <div
                 style={{
                   display: "flex",
-                  alignItems: "center"
+                  alignItems: "center",
+                  overflowX: "hidden"
                 }}
               >
-                <Icon type="eye" />
-                <div style={{ marginLeft: "6px" }}>{views || 0}</div>
+                <div>
+                  {"编辑于 " +
+                    (moment().diff(moment(updatedAt), "weeks") < 1
+                      ? moment(updatedAt).fromNow()
+                      : moment(updatedAt).calendar())}
+                </div>
                 <div style={{ marginLeft: "12px" }}>
                   {tags && tags.join(" / ")}
                 </div>
@@ -128,6 +137,8 @@ export default class ArticlePage extends React.Component<
                   alignItems: "center"
                 }}
               >
+                <Icon style={{ marginRight: "6px" }} type="eye" />
+                <div style={{ marginRight: "12px" }}>{views || 0}</div>
                 <Icon
                   className={liked ? "like-button-clicked" : "like-button"}
                   type="like"
@@ -238,7 +249,8 @@ export default class ArticlePage extends React.Component<
           userInfo && userInfo.id
             ? article.likers.includes(userInfo.id)
             : false,
-        tags: article.tags
+        tags: article.tags,
+        updatedAt: article.updatedAt
       });
 
       if (!article.visible) {

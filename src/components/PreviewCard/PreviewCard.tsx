@@ -1,4 +1,5 @@
 import { Card, Icon } from "antd";
+import moment from "moment";
 import React, { Component } from "react";
 import baseUrl from "../../config/baseUrl";
 import "./PreviewCard.css";
@@ -13,6 +14,7 @@ export interface IPreviewCardProps {
   views?: number;
   tags?: string[];
   likes?: number;
+  createdAt?: string;
 }
 
 interface IPreviewCardState {
@@ -33,7 +35,16 @@ export default class PreviewCard extends Component<
   }
 
   render() {
-    const { title, abstract, image, loading, views, tags, likes } = this.props;
+    const {
+      title,
+      abstract,
+      image,
+      loading,
+      views,
+      tags,
+      likes,
+      createdAt
+    } = this.props;
     const { imgLoading, imgFailLoading } = this.state;
 
     return (
@@ -66,11 +77,15 @@ export default class PreviewCard extends Component<
               alignItems: "center",
               marginLeft: "-24px",
               marginBottom: "-36px",
-              marginTop: "36px"
+              marginTop: "36px",
+              overflowX: "hidden"
             }}
           >
-            <Icon type="eye" />
-            <div style={{ marginLeft: "6px" }}>{views || 0}</div>
+            <div>
+              {moment().diff(moment(createdAt), "weeks") < 2
+                ? moment(createdAt).fromNow()
+                : moment(createdAt).format("L")}
+            </div>
             <div style={{ marginLeft: "12px" }}>{tags && tags.join(" / ")}</div>
           </div>
           <div
@@ -82,8 +97,10 @@ export default class PreviewCard extends Component<
               marginTop: "36px"
             }}
           >
-            <Icon type="like" />
-            <div style={{ marginLeft: "6px" }}>{likes || 0}</div>
+            <Icon style={{ marginRight: "6px" }} type="eye" />
+            <div style={{ marginRight: "12px" }}>{views || 0}</div>
+            <Icon style={{ marginRight: "6px" }} type="like" />
+            <div>{likes || 0}</div>
           </div>
         </div>
       </Card>
