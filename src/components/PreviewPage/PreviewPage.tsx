@@ -44,7 +44,7 @@ export default class PreviewPage extends Component<{}, IPreviewPageState> {
             // tslint:disable-next-line: jsx-no-lambda
             renderItem={(item: IArticleModel) => (
               <List.Item className="ListItem" key={item.id}>
-                <Link to={`/articles/${item.alias}`}>
+                <Link style={{ width: "100%" }} to={`/articles/${item.alias}`}>
                   <PreviewCard
                     loading={loading}
                     image={item.image}
