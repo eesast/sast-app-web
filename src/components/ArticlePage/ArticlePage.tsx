@@ -229,7 +229,7 @@ export default class ArticlePage extends React.Component<
 
     try {
       const articleResponse = await axios.get(
-        `/v1/articles?alias=${alias}&imvisible=true`
+        `/v1/articles?alias=${alias}&invisible=true`
       );
       article = articleResponse.data[0] as IArticleModel;
 

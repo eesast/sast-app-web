@@ -396,7 +396,7 @@ export default class ManagePage extends React.Component<{}, IManagePageState> {
       this.setState({ users: usersResponse.data || [] });
 
       const articlesResponse = await axios.get(
-        `/v1/articles?begin=0&end=4&imvisible=true&noContent=true`
+        `/v1/articles?begin=0&end=4&invisible=true&noContent=true`
       );
 
       const articles = articlesResponse.data || [];
@@ -603,7 +603,7 @@ export default class ManagePage extends React.Component<{}, IManagePageState> {
       try {
         const articlesResponse = await axios.get(
           `/v1/articles?begin=${page * 10 - 5}&end=${page * 10 +
-            4}&noContent=true&imvisible=true`
+            4}&noContent=true&invisible=true`
         );
         data = (data as IArticleModel[]).concat(
           articlesResponse.data as IArticleModel[]
