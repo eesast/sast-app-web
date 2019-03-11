@@ -40,7 +40,7 @@ const steps = [
 ];
 
 interface IResourceRoomPageState {
-  value: Moment;
+  value?: Moment;
   formVisible: boolean;
   current: number;
   reserveTimeFrom: Moment;
@@ -76,8 +76,10 @@ class ResourceRoomPage extends Component<
       <div className="ResourceRoomPage">
         <Calendar
           value={value}
+          mode="month"
           onSelect={this.handleFormOpen}
           dateCellRender={this.dateCellRender}
+          onPanelChange={this.handlePanelChange}
         />
         <Modal
           title="预约活动室"
@@ -146,6 +148,12 @@ class ResourceRoomPage extends Component<
     );
   }
 
+  handlePanelChange = (date?: Moment) => {
+    this.setState({
+      value: date
+    });
+  };
+
   handleFormOpen = (date: Moment = moment()) => {
     this.setState({
       formVisible: true,
@@ -168,11 +176,20 @@ class ResourceRoomPage extends Component<
 
     const itemId = -1;
 
+    const from = moment(this.state.reserveDate).set({
+      hour: this.state.reserveTimeFrom.get("hour"),
+      minute: this.state.reserveTimeFrom.get("minute")
+    });
+    const to = moment(this.state.reserveDate).set({
+      hour: this.state.reserveTimeTo.get("hour"),
+      minute: this.state.reserveTimeTo.get("minute")
+    });
+
     const newReservation: any = {
       itemId,
       userId: userInfo!.id,
-      from: this.state.reserveTimeFrom.toISOString(),
-      to: this.state.reserveTimeTo.toISOString(),
+      from: from.toISOString(),
+      to: to.toISOString(),
       reason: this.state.reserveReason
     };
 
