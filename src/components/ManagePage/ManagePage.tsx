@@ -312,8 +312,11 @@ export default class ManagePage extends React.Component<{}, IManagePageState> {
           // tslint:disable-next-line: jsx-no-lambda
           onChange={checked => this.handleVisibleChange(item.id, checked)}
         />,
+        <Link key={1} to={`/articles/${item.alias}/edit`}>
+          <Button icon="edit" />
+        </Link>,
         <Button
-          key={1}
+          key={2}
           icon="delete"
           // tslint:disable-next-line: jsx-no-lambda
           onClick={() => this.handleArticleDelete(item.id)}

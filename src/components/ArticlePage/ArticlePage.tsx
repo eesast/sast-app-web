@@ -16,7 +16,7 @@ import Marked from "marked";
 import moment from "moment";
 import React from "react";
 import DocumentTitle from "react-document-title";
-import { RouteComponentProps } from "react-router-dom";
+import { Link, RouteComponentProps } from "react-router-dom";
 import IArticleModel from "../../models/Article";
 import ICommentModel from "../../models/Comment";
 import IUserModel from "../../models/User";
@@ -98,12 +98,40 @@ export default class ArticlePage extends React.Component<
       updatedAt
     } = this.state;
 
+    const userRole = this.context.userInfo.role;
+    const userName = this.context.userInfo.name;
+
+    const CustomTitle = (
+      <div
+        style={{
+          height: 36,
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center"
+        }}
+      >
+        <div className="ant-card-head-title">{author}</div>
+        <Link to={`/articles/${this.props.match.params.alias}/edit`}>
+          <Button
+            hidden={
+              userRole !== "root" &&
+              userRole !== "editor" &&
+              author !== userName
+            }
+          >
+            编辑文章
+          </Button>
+        </Link>
+      </div>
+    );
+
     return (
       <DocumentTitle
         title={title === "" ? "SAST Weekly" : "SAST Weekly | " + title}
       >
         <div className="ArticlePage">
-          <Card loading={loading} title={author}>
+          <Card loading={loading} title={CustomTitle}>
             <article className="markdown-body">
               <div dangerouslySetInnerHTML={md} />
             </article>
