@@ -354,8 +354,9 @@ class EditPage extends Component<RouteComponentProps, IEditPageState> {
     }
   };
 
-  handleRefresh = () => {
-    return "刷新将会丢失所有已编辑的内容，是否确定？";
+  handleRefresh = (e: Event) => {
+    e.preventDefault();
+    e.returnValue = true;
   };
 
   handleSubmit = () => {
