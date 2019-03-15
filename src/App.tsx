@@ -39,8 +39,17 @@ class App extends Component {
                     path="/register"
                     component={RegisterPage}
                   />
-                  <Route path="/articles/:alias" component={ArticlePage} />
+                  <Route
+                    exact={true}
+                    path="/articles/:alias"
+                    component={ArticlePage}
+                  />
                   <Route exact={true} path="/login" component={LoginPage} />
+                  <AuthRoute
+                    exact={true}
+                    path="/articles/:alias/edit"
+                    component={EditPage}
+                  />
                   <AuthRoute
                     exact={true}
                     path="/manage"

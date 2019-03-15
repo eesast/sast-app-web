@@ -22,6 +22,7 @@ import React, { Component } from "react";
 import DocumentTitle from "react-document-title";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import baseUrl from "../../config/baseUrl";
+import IArticleModel from "../../models/Article";
 import "../../primer-markdown.css";
 import { AuthContext } from "../AuthContext/AuthContext";
 import MultipleUpload from "../MultipleUpload/MultipleUpload";
@@ -37,11 +38,15 @@ Marked.setOptions({
   sanitizer: DOMPurify.sanitize
 });
 
+export type IEditPageProps = RouteComponentProps<{ alias: string }>;
+
 interface IEditPageState {
+  isModifying: boolean;
+  id: number;
   title: string;
   alias: string;
   content: string;
-  abstract: string;
+  abstract?: string;
   author: string;
   titleImageFileList: UploadFile[];
   imageFileList: UploadFile[];
@@ -55,15 +60,17 @@ interface IEditPageState {
   tagInputValue: string;
 }
 
-class EditPage extends Component<RouteComponentProps, IEditPageState> {
+class EditPage extends Component<IEditPageProps, IEditPageState> {
   context!: React.ContextType<typeof AuthContext>;
 
   textareaRef: React.RefObject<TextArea>;
   tagInputRef: React.RefObject<Input>;
 
-  constructor(props: RouteComponentProps) {
+  constructor(props: IEditPageProps) {
     super(props);
     this.state = {
+      isModifying: false,
+      id: 0,
       title: "",
       alias: "",
       abstract: "",
@@ -394,32 +401,98 @@ class EditPage extends Component<RouteComponentProps, IEditPageState> {
       content:
         "请在发布前预览 Markdown，确保文章完整可读。\n确定发布该文章吗？",
       onOk: async () => {
-        try {
-          await axios.post("/v1/articles", {
-            title,
-            alias,
-            authorId,
-            abstract,
-            image: image.response,
-            content,
-            tags
-          });
+        if (this.state.isModifying) {
+          try {
+            await axios.put(`/v1/articles/${this.state.id}`, {
+              title,
+              alias,
+              abstract,
+              image: image.response,
+              content,
+              tags
+            });
 
-          message.success("文章发布成功");
-          this.props.history.replace(`/articles/${alias}`);
-        } catch (error) {
-          if (error.response.status === 401) {
-            message.error("权限不足");
-          } else {
-            message.error("文章发布失败，请重试");
+            message.success("文章修改成功");
+            this.props.history.replace(`/articles/${alias}`);
+          } catch (error) {
+            if (error.response.status === 401) {
+              message.error("权限不足");
+            } else {
+              message.error("文章修改失败，请重试");
+            }
+          }
+        } else {
+          try {
+            await axios.post("/v1/articles", {
+              title,
+              alias,
+              authorId,
+              abstract,
+              image: image.response,
+              content,
+              tags
+            });
+
+            message.success("文章发布成功");
+            this.props.history.replace(`/articles/${alias}`);
+          } catch (error) {
+            if (error.response.status === 401) {
+              message.error("权限不足");
+            } else {
+              message.error("文章发布失败，请重试");
+            }
           }
         }
       }
     });
   };
 
-  componentDidMount = () => {
+  componentDidMount = async () => {
     window.addEventListener("beforeunload", this.handleRefresh);
+
+    if (this.props.history.location.pathname.endsWith("edit")) {
+      this.setState({ isModifying: true });
+      const alias = this.props.match.params.alias;
+      let article: IArticleModel | null = null;
+
+      try {
+        const articleResponse = await axios.get(
+          `/v1/articles?alias=${alias}&invisible=true`
+        );
+        article = articleResponse.data[0] as IArticleModel;
+
+        const authorResponse = await axios.get(`/v1/users/${article.authorId}`);
+        const author = authorResponse.data;
+
+        this.setState({
+          id: article.id,
+          title: article.title,
+          alias: article.alias,
+          abstract: article.abstract,
+          content: article.content,
+          author: author.name,
+          md: {
+            __html: article.content
+          },
+          tags: article.tags,
+          titleImageFileList: [
+            {
+              uid: "-1",
+              name: article.title,
+              response: article.image,
+              url: baseUrl + article.image,
+              thumbUrl: baseUrl + article.image
+            }
+          ] as any
+        });
+
+        if (!article.visible) {
+          message.info("正在编辑未发布的文章");
+        }
+      } catch {
+        message.error("文章加载失败");
+      }
+    }
   };
 
   componentWillUnmount = () => {
