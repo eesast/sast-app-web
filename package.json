@@ -1,6 +1,6 @@
 {
   "name": "sast-app-web",
-  "version": "2.2.2",
+  "version": "2.3.0",
   "private": true,
   "dependencies": {
     "@types/dompurify": "^0.0.32",
