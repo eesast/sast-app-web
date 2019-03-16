@@ -60,7 +60,7 @@ class App extends Component {
                     exact={true}
                     path="/edit"
                     component={EditPage}
-                    authenticate={["writer", "root"]}
+                    authenticate={["writer", "editor", "root"]}
                   />
                   <AuthRoute
                     exact={true}
