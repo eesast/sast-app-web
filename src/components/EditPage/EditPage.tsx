@@ -17,6 +17,8 @@ import axios from "axios";
 import DOMPurify from "dompurify";
 import hljs from "highlight.js";
 import "highlight.js/styles/github.css";
+import katex from "katex";
+import "katex/dist/katex.css";
 import Marked from "marked";
 import React, { Component } from "react";
 import DocumentTitle from "react-document-title";
@@ -30,12 +32,29 @@ import "./EditPage.css";
 
 const confirm = Modal.confirm;
 
+const renderer = new Marked.Renderer();
+renderer.code = (code, lang, isEscaped) => {
+  if (lang === "math") {
+    return katex.renderToString(code, { throwOnError: false });
+  } else {
+    return new Marked.Renderer().code(code, lang, isEscaped);
+  }
+};
+renderer.codespan = code => {
+  if (code.length >= 2 && code.startsWith("$") && code.endsWith("$")) {
+    return katex.renderToString(code.slice(1, -1), { throwOnError: false });
+  } else {
+    return new Marked.Renderer().codespan(code);
+  }
+};
+
 Marked.setOptions({
   highlight: code => {
     return hljs.highlightAuto(code).value;
   },
   sanitize: true,
-  sanitizer: DOMPurify.sanitize
+  sanitizer: DOMPurify.sanitize,
+  renderer
 });
 
 export type IEditPageProps = RouteComponentProps<{ alias: string }>;
