@@ -453,44 +453,48 @@ class EditPage extends Component<IEditPageProps, IEditPageState> {
     if (this.props.history.location.pathname.endsWith("edit")) {
       this.setState({ isModifying: true });
       const alias = this.props.match.params.alias;
-      let article: IArticleModel | null = null;
+      if (alias) {
+        let article: IArticleModel | null = null;
 
-      try {
-        const articleResponse = await axios.get(
-          `/v1/articles?alias=${alias}&invisible=true`
-        );
-        article = articleResponse.data[0] as IArticleModel;
+        try {
+          const articleResponse = await axios.get(
+            `/v1/articles?alias=${alias}&invisible=true`
+          );
+          article = articleResponse.data[0] as IArticleModel;
 
-        const authorResponse = await axios.get(`/v1/users/${article.authorId}`);
-        const author = authorResponse.data;
+          const authorResponse = await axios.get(
+            `/v1/users/${article.authorId}`
+          );
+          const author = authorResponse.data;
 
-        this.setState({
-          id: article.id,
-          title: article.title,
-          alias: article.alias,
-          abstract: article.abstract,
-          content: article.content,
-          author: author.name,
-          md: {
-            __html: article.content
-          },
-          tags: article.tags,
-          titleImageFileList: [
-            {
-              uid: "-1",
-              name: article.title,
-              response: article.image,
-              url: baseUrl + article.image,
-              thumbUrl: baseUrl + article.image
-            }
-          ] as any
-        });
+          this.setState({
+            id: article.id,
+            title: article.title,
+            alias: article.alias,
+            abstract: article.abstract,
+            content: article.content,
+            author: author.name,
+            md: {
+              __html: article.content
+            },
+            tags: article.tags,
+            titleImageFileList: [
+              {
+                uid: "-1",
+                name: article.title,
+                response: article.image,
+                url: baseUrl + article.image,
+                thumbUrl: baseUrl + article.image
+              }
+            ] as any
+          });
 
-        if (!article.visible) {
-          message.info("正在编辑未发布的文章");
+          if (!article.visible) {
+            message.info("正在编辑未发布的文章");
+          }
+        } catch {
+          message.error("文章加载失败");
         }
-      } catch {
-        message.error("文章加载失败");
       }
     }
   };
