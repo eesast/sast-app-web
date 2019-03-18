@@ -110,7 +110,8 @@ export default class PreviewPage extends Component<{}, IPreviewPageState> {
       if (response.data.length < 5) {
         this.setState({
           hasMore: false,
-          loading: false
+          loading: false,
+          data
         });
         return;
       }
