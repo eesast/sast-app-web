@@ -222,7 +222,7 @@ class EditPage extends Component<IEditPageProps, IEditPageState> {
               <Input
                 className="input"
                 name="alias"
-                placeholder="英文标题，例：tensorflow-first-look"
+                placeholder="英文标题，字母小写且用横杠连接，例：tensorflow-first-look"
                 value={alias}
                 onChange={this.handleInputChange}
               />
