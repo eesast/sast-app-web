@@ -1,6 +1,6 @@
 {
   "name": "sast-app-web",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "private": true,
   "dependencies": {
     "@types/dompurify": "^0.0.32",
@@ -17,7 +17,7 @@
     "@types/react-dom": "^16.8.2",
     "@types/react-infinite-scroller": "^1.2.1",
     "@types/react-router-dom": "^4.3.1",
-    "antd": "^3.15.0",
+    "antd": "^3.15.1",
     "axios": "^0.18.0",
     "babel-plugin-import": "^1.11.0",
     "customize-cra": "^0.2.12",
