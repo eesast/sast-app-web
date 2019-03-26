@@ -387,7 +387,7 @@ class EditPage extends Component<IEditPageProps, IEditPageState> {
 
   handleSubmit = () => {
     const title = this.state.title;
-    const alias = this.state.alias;
+    const alias = this.state.alias.trim();
     const abstract = this.state.abstract;
     const tags = this.state.tags;
     const content = this.state.content;
