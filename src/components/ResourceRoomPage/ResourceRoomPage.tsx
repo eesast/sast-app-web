@@ -27,15 +27,15 @@ const TextArea = Input.TextArea;
 const steps = [
   {
     title: "选择时间",
-    description: "..."
+    description: ""
   },
   {
     title: "预约说明",
-    description: "..."
+    description: ""
   },
   {
     title: "完成预约",
-    description: "..."
+    description: ""
   }
 ];
 
