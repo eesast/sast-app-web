@@ -1,6 +1,6 @@
 {
   "name": "sast-app-web",
-  "version": "2.4.2",
+  "version": "2.4.3",
   "private": true,
   "dependencies": {
     "@types/dompurify": "^0.0.32",
@@ -11,8 +11,8 @@
     "@types/jwt-decode": "^2.2.1",
     "@types/katex": "^0.10.1",
     "@types/marked": "^0.6.3",
-    "@types/node": "^11.12.0",
-    "@types/react": "^16.8.7",
+    "@types/node": "^11.12.2",
+    "@types/react": "^16.8.8",
     "@types/react-document-title": "^2.0.3",
     "@types/react-dom": "^16.8.3",
     "@types/react-infinite-scroller": "^1.2.1",
@@ -33,10 +33,10 @@
     "lint-staged": "^8.1.5",
     "marked": "^0.6.1",
     "moment": "^2.24.0",
-    "react": "^16.8.5",
+    "react": "^16.8.6",
     "react-app-rewired": "^2.1.1",
     "react-document-title": "^2.0.3",
-    "react-dom": "^16.8.5",
+    "react-dom": "^16.8.6",
     "react-infinite-scroller": "^1.2.4",
     "react-router-dom": "^5.0.0",
     "react-scripts": "^2.1.8",
@@ -44,7 +44,7 @@
     "tslint-config-prettier": "^1.18.0",
     "tslint-eslint-rules": "^5.4.0",
     "tslint-react": "^4.0.0",
-    "typescript": "^3.3.4000"
+    "typescript": "^3.4.1"
   },
   "scripts": {
     "start": "react-app-rewired start",
