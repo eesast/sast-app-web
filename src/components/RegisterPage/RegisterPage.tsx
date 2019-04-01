@@ -179,25 +179,12 @@ class RegistrationForm extends React.Component<
         <FormItem {...formItemLayout} label="院系">
           {getFieldDecorator("department", {
             rules: [{ required: true, message: "请输入院系" }]
-          })(
-            <Select
-              showSearch={true}
-              optionFilterProp="children"
-              filterOption={this.handleSelectFilter}
-            >
-              {departmentOptions}
-            </Select>
-          )}
+          })(<Input />)}
         </FormItem>
         <FormItem {...formItemLayout} label="班级">
           {getFieldDecorator("class", {
-            rules: [
-              { required: true, message: "请输入班级" },
-              {
-                validator: this.validateClass
-              }
-            ]
-          })(<Input addonBefore={classSelector} />)}
+            rules: [{ required: true, message: "请输入班级" }]
+          })(<Input />)}
         </FormItem>
         <FormItem style={{ textAlign: "center" }}>
           <Button type="primary" htmlType="submit">
