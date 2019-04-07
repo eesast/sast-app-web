@@ -286,7 +286,7 @@ class RegistrationForm extends React.Component<
             name: values.name,
             phone: parseFloat(values.phone),
             department: values.department,
-            class: values["class-prefix"] + values.class
+            class: values.class
           });
           this.props.history.replace("/login");
         } catch {
