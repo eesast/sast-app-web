@@ -87,16 +87,34 @@ const options = [
 ];
 
 interface IManagePageState {
-  users: IUserModel[];
-  articles: IArticleModel[];
+  users: Array<
+    IUserModel & {
+      loading: boolean;
+      itemName: string;
+      userName: string;
+    }
+  >;
+  articles: Array<IArticleModel & { loading: boolean; author: string }>;
   selectedMenu: "0" | "1" | "2" | "3";
-  allUsers: IUserModel[];
-  allArticles: IArticleModel[];
+  allUsers: Array<IUserModel & { loading: boolean }>;
+  allArticles: Array<IArticleModel & { loading: boolean; author: string }>;
   page: number;
   loading: boolean;
   hasMore: boolean;
-  reservations: IReservationModel[];
-  allReservations: IReservationModel[];
+  reservations: Array<
+    IReservationModel & {
+      loading: boolean;
+      itemName: string;
+      userName: string;
+    }
+  >;
+  allReservations: Array<
+    IReservationModel & {
+      loading: boolean;
+      itemName: string;
+      userName: string;
+    }
+  >;
   onlyShowForKeeper: boolean;
 }
 
@@ -592,7 +610,7 @@ export default class ManagePage extends React.Component<{}, IManagePageState> {
 
   handleInfiniteLoadMore = async () => {
     const page = this.state.page;
-    let data =
+    let data: any =
       this.state.selectedMenu === "1"
         ? this.state.allArticles
         : this.state.selectedMenu === "2"
