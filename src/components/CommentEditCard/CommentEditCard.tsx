@@ -25,7 +25,7 @@ const confirm = Modal.confirm;
 const TextArea = Input.TextArea;
 
 export interface ICommentEditCardProps {
-  innerRef?: React.Ref<{}>;
+  innerRef?: React.Ref<HTMLDivElement>;
   className?: string;
   history: RouteComponentProps["history"];
   articleId: number;
@@ -205,6 +205,8 @@ class CommentEditCard extends Component<
   };
 }
 
-export default React.forwardRef((props: ICommentEditCardProps, ref) => (
-  <CommentEditCard innerRef={ref} {...props} />
-));
+export default React.forwardRef(
+  (props: ICommentEditCardProps, ref: React.Ref<HTMLDivElement>) => (
+    <CommentEditCard innerRef={ref} {...props} />
+  )
+);

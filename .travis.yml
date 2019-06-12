@@ -1,15 +1,11 @@
 language: node_js
 node_js: "node"
-cache: npm
+cache: yarn
 install:
-  - npm ci
-  - npm install -g codecov
+  - yarn
 script:
-  - npm run build
-  - npm test -- --coverage
-  - codecov
+  - yarn test
+  - yarn build
 deploy:
   provider: script
   script: bash scripts/deploy.sh
-  on:
-    tags: true

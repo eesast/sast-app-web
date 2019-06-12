@@ -79,7 +79,7 @@ class LoginForm extends React.Component<
  * `hoist-non-react-statics` in `react-router` is old
  * @see https://stackoverflow.com/questions/53240058/use-hoist-non-react-statics-with-withrouter
  */
-const WrappedLoginForm = withRouter(Form.create()(LoginForm));
+const WrappedLoginForm = withRouter(Form.create()(LoginForm) as any);
 LoginForm.contextType = AuthContext;
 
 // tslint:disable-next-line: max-classes-per-file

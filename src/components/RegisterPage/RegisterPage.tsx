@@ -6,7 +6,6 @@ import {
   Icon,
   Input,
   message,
-  Select,
   Tooltip
 } from "antd";
 import { AutoCompleteProps } from "antd/lib/auto-complete";
@@ -21,9 +20,6 @@ import "./RegisterPage.css";
 
 const FormItem = Form.Item;
 const AutoCompleteOption = AutoComplete.Option;
-const SelectOption = Select.Option;
-
-const departmentOptionsList = ["电子系"];
 
 const isNumeric = (n: any) => {
   return !isNaN(parseFloat(n)) && isFinite(n);
@@ -66,18 +62,6 @@ class RegistrationForm extends React.Component<
     const emailOptions = autoCompleteResult.map(email => (
       <AutoCompleteOption key={email}>{email}</AutoCompleteOption>
     ));
-
-    const departmentOptions = departmentOptionsList.map(department => (
-      <SelectOption key={department}>{department}</SelectOption>
-    ));
-
-    const classSelector = getFieldDecorator("class-prefix", {
-      initialValue: "无"
-    })(
-      <Select style={{ width: 50 }}>
-        <SelectOption value="无">无</SelectOption>
-      </Select>
-    );
 
     return (
       <Form layout="vertical" onSubmit={this.handleSubmit}>
@@ -303,7 +287,9 @@ class RegistrationForm extends React.Component<
  * `hoist-non-react-statics` in `react-router` is old
  * @see https://stackoverflow.com/questions/53240058/use-hoist-non-react-statics-with-withrouter
  */
-const WrappedRegistrationForm = withRouter(Form.create()(RegistrationForm));
+const WrappedRegistrationForm = withRouter(Form.create()(
+  RegistrationForm
+) as any);
 RegistrationForm.contextType = AuthContext;
 
 // tslint:disable-next-line: max-classes-per-file
