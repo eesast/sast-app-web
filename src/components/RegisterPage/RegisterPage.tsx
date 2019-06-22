@@ -189,7 +189,11 @@ class RegistrationForm extends React.Component<
     this.setState({ confirmDirty: this.state.confirmDirty || !!value });
   };
 
-  validateId: ValidationRule["validator"] = (rule, value, callback) => {
+  validateId: ValidationRule["validator"] = (
+    rule,
+    value: any,
+    callback: any
+  ) => {
     if (value && (!isNumeric(value) || value.length !== 10)) {
       callback("请输入正确的学号");
     } else {
@@ -197,7 +201,11 @@ class RegistrationForm extends React.Component<
     }
   };
 
-  validatePhone: ValidationRule["validator"] = (rule, value, callback) => {
+  validatePhone: ValidationRule["validator"] = (
+    rule,
+    value: any,
+    callback: any
+  ) => {
     if (value && (!isNumeric(value) || value.length !== 11)) {
       callback("请输入正确的手机号");
     } else {
@@ -208,7 +216,7 @@ class RegistrationForm extends React.Component<
   compareToFirstPassword: ValidationRule["validator"] = (
     rule,
     value,
-    callback
+    callback: any
   ) => {
     const form = this.props.form;
     if (value && value !== form.getFieldValue("password")) {
@@ -221,7 +229,7 @@ class RegistrationForm extends React.Component<
   validateToNextPassword: ValidationRule["validator"] = (
     rule,
     value,
-    callback
+    callback: any
   ) => {
     const form = this.props.form;
     if (value && this.state.confirmDirty) {
@@ -230,7 +238,11 @@ class RegistrationForm extends React.Component<
     callback();
   };
 
-  validateClass: ValidationRule["validator"] = (rule, value, callback) => {
+  validateClass: ValidationRule["validator"] = (
+    rule,
+    value: any,
+    callback: any
+  ) => {
     if (value && (!isNumeric(value) || value.length !== 2)) {
       callback("请输入正确的班级");
     } else {
@@ -259,7 +271,7 @@ class RegistrationForm extends React.Component<
 
   handleSubmit: FormProps["onSubmit"] = e => {
     e.preventDefault();
-    this.props.form.validateFieldsAndScroll(async (err, values) => {
+    this.props.form.validateFieldsAndScroll(async (err, values: any) => {
       if (!err) {
         try {
           await axios.post("/v1/users", {

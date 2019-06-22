@@ -156,7 +156,11 @@ class ProfileForm extends React.Component<
     this.setState({ confirmDirty: this.state.confirmDirty || !!value });
   };
 
-  validatePhone: ValidationRule["validator"] = (rule, value, callback) => {
+  validatePhone: ValidationRule["validator"] = (
+    rule,
+    value: any,
+    callback: any
+  ) => {
     if (value && (!isNumeric(value) || value.toString().length !== 11)) {
       callback("请输入正确的手机号");
     } else {
@@ -167,7 +171,7 @@ class ProfileForm extends React.Component<
   compareToFirstPassword: ValidationRule["validator"] = (
     rule,
     value,
-    callback
+    callback: any
   ) => {
     const form = this.props.form;
     if (value && value !== form.getFieldValue("password")) {
@@ -180,7 +184,7 @@ class ProfileForm extends React.Component<
   validateToNextPassword: ValidationRule["validator"] = (
     rule,
     value,
-    callback
+    callback: any
   ) => {
     const form = this.props.form;
     if (value && this.state.confirmDirty) {
@@ -210,7 +214,7 @@ class ProfileForm extends React.Component<
 
   handleSubmit: FormProps["onSubmit"] = e => {
     e.preventDefault();
-    this.props.form.validateFieldsAndScroll(async (err, values) => {
+    this.props.form.validateFieldsAndScroll(async (err, values: any) => {
       if (!err) {
         this.context.checkTokenStatus();
         if (!this.context.auth) {

@@ -65,7 +65,7 @@ class LoginForm extends React.Component<
 
   handleSubmit = (e: any) => {
     e.preventDefault();
-    this.props.form.validateFields(async (err, values) => {
+    this.props.form.validateFields(async (err, values: any) => {
       if (!err) {
         if (await this.context.login(values.userName, values.password)) {
           this.props.history.goBack();
