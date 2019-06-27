@@ -32,7 +32,7 @@
     "enzyme": "3.10.0",
     "enzyme-adapter-react-16": "1.14.0",
     "highlight.js": "9.15.8",
-    "husky": "2.6.0",
+    "husky": "2.7.0",
     "jwt-decode": "2.2.0",
     "katex": "0.10.2",
     "less": "3.9.0",
